@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 104d810af93650d48a39fc224926a2a5, type: 3}
+  m_Name: DashData
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 5622238952495746720, guid: 7a2836870f95f6e4a8b64c103877b8e3, type: 3}
+  noFriction: {fileID: 6200000, guid: 494c10a3f07b4ca438de4084d557b0ba, type: 2}
+  maxTimeBetweenPresses: 0.2
+  dashTime: 0.4
+  minDashSpeed: 5
+  maxDashSpeed: 25
+  castDistance: 0.5
+  yResolvingVelocity: 10
+  colliderEdge: 0.05
+  castPercent: 0.15
