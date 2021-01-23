@@ -19,13 +19,18 @@ namespace Game.Saving
 
     public static class SavingService
     {
-        private const string ACTIVE_SCENE_KEY = "activeScene";
-        private const string SCENES_KEY = "scenes";
-        private static UnityEngine.Events.UnityAction<Scene, LoadSceneMode> LoadObjectsAfterSceneLoad;
+        const string ACTIVE_SCENE_KEY = "activeScene";
+        const string SCENES_KEY = "scenes";
+        static UnityEngine.Events.UnityAction<Scene, LoadSceneMode> LoadObjectsAfterSceneLoad;
+        static IFormatter formatter;
+
+        static SavingService()
+        {
+            formatter = new BinaryFormatter();
+        }
 
         public static void SaveGame(string fileName)
         {
-            IFormatter formatter = new BinaryFormatter();
             List<ISaveable> saveables = GetSaveables();
             Dictionary<string, object> savedObjects = new Dictionary<string, object>();
 
@@ -59,7 +64,6 @@ namespace Game.Saving
 
         public static bool LoadGame(string fileName)
         {
-            IFormatter formatter = new BinaryFormatter();
             Stream fileStream = GetStream(fileName, FileMode.Open, FileAccess.Read);
             if (fileStream == null)
             {

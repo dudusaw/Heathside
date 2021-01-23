@@ -18,6 +18,8 @@ MonoBehaviour:
   dashTime: 0.4
   minDashSpeed: 5
   maxDashSpeed: 25
+  impulseAmp: 3
+  impulseFreq: 3
   castDistance: 0.5
   yResolvingVelocity: 10
   colliderEdge: 0.05

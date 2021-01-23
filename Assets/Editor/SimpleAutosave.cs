@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
-namespace Game.Editor
+namespace Game
 {
     [InitializeOnLoad]
     public static class SimpleAutosave

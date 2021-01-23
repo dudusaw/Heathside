@@ -4,8 +4,8 @@ namespace Game.Base
 {
     public static class GameLayers
     {
-        public static int ground;
-        public static int hittable;
+        public static readonly int ground;
+        public static readonly int hittable;
 
         static GameLayers()
         {

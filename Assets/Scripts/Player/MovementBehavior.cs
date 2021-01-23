@@ -84,9 +84,9 @@ namespace Game.Control
             }
         }
 
-        public void ScaleFlipFromDirection(Transform t)
+        public void ScaleFlipFromDirection()
         {
-            Vector3 scale = t.localScale;
+            Vector3 scale = transform.localScale;
             switch (movingDirection)
             {
                 case MovingDirection.idle:
@@ -101,7 +101,7 @@ namespace Game.Control
                     lastDirection = MovingDirection.right;
                     break;
             }
-            t.localScale = scale;
+            transform.localScale = scale;
         }
     }
 

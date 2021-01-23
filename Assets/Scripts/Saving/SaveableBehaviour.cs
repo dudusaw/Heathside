@@ -25,7 +25,6 @@ namespace Game.Saving
 
         public void OnAfterDeserialize()
         {
-            // nothing
         }
 
         public void OnBeforeSerialize()

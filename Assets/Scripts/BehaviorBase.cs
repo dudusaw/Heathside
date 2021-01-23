@@ -6,7 +6,7 @@ namespace Game.Base
     public class BehaviorBase : MonoBehaviour, IStateBehavior
     {
         [SerializeField] protected MovementAbility movement;
-        [SerializeField] protected bool interruptible;
+        [SerializeField] protected bool interruptible = true;
 
         public virtual bool IsActive => false;
 

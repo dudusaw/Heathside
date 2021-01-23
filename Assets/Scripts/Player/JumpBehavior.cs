@@ -8,8 +8,7 @@ namespace Game.Control
 {
     public class JumpBehavior : MonoBehaviour
     {
-        [SerializeField]
-        PlayerData data;
+        [SerializeField] PlayerData data;
 
         bool jumpCoroStarted;
         Func<bool> onGround;

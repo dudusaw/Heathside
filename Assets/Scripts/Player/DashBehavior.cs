@@ -1,6 +1,7 @@
 ﻿using Cinemachine;
 using Game.Animation;
 using Game.Base;
+using UnityEditor;
 using UnityEngine;
 
 namespace Game.Control
@@ -33,9 +34,11 @@ namespace Game.Control
             rb = this.GetComponentOnRoot<Rigidbody2D>();
             anim = this.GetComponentOnRoot<Animator>();
             col = this.GetComponentOnRoot<Collider2D>();
-            impulseSrc = this.GetComponentOnRoot<CinemachineImpulseSource>();
+            impulseSrc = GetComponent<CinemachineImpulseSource>();
             Utils.CheckComponents(rb, anim, col, data, impulseSrc);
             initialGrav = rb.gravityScale;
+            impulseSrc.m_ImpulseDefinition.m_AmplitudeGain = data.impulseAmp;
+            impulseSrc.m_ImpulseDefinition.m_FrequencyGain = data.impulseFreq;
         }
 
         public override void StateUpdate()
@@ -157,9 +160,10 @@ namespace Game.Control
             if (active) return;
 
             anim.Play(AnimatorArgs.Player_dash_start);
-            Vector3 scale = transform.localScale;
+            Transform root = transform.root.transform;
+            Vector3 scale = root.localScale;
             scale.x = (int)direction * Mathf.Abs(scale.x);
-            transform.localScale = scale;
+            root.localScale = scale;
             speedTime = 0;
             rb.gravityScale = 0;
             active = true;
