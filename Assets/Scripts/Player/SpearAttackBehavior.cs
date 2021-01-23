@@ -9,9 +9,9 @@ namespace Game.Control
     public class SpearAttackBehavior : BehaviorBase
     {
         [SerializeField] SpearAttackBase[] attacks;
-        [SerializeField] float maxTimeBetweenAttacks = 0.3f;
-        [SerializeField] float activeTime = 0.35f;
-        [SerializeField] float minTimeForQueue = 0.3f;
+        [SerializeField] float maxTimeBetweenAttacks;
+        [SerializeField] float activeTime;
+        [SerializeField] float minTimeForQueue;
         [SerializeField] bool queueNextAttackWhenReady;
 
         int prevAttack;
@@ -44,7 +44,7 @@ namespace Game.Control
 
         public override void StateUpdate()
         {
-            if (!queueCoStarted && Input.GetMouseButtonDown(0))
+            if (!queueCoStarted && CInput.GetMouseButtonDownNonUI(0))
             {
                 if (!IsActive)
                 {

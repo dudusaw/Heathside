@@ -11,10 +11,9 @@ namespace Game.Base
 
     public class ObjectPool : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject prefab;
+        [SerializeField] GameObject prefab;
 
-        private Queue<GameObject> inactiveObjects = new Queue<GameObject>();
+        Queue<GameObject> inactiveObjects = new Queue<GameObject>();
 
         public GameObject GetObject()
         {

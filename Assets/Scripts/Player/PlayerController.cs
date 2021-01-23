@@ -4,6 +4,7 @@ using Game.Saving;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Game.Control
@@ -96,7 +97,18 @@ namespace Game.Control
 
 			foreach (var item in allBehaviors)
 			{
+				bool wasInactive = item.IsActive == false;
 				item.StateUpdate();
+				if (wasInactive && item.IsActive)
+				{
+                    foreach (var item2 in allBehaviors)
+                    {
+						if (item2 != item && item2.IsActive && item2.Interruptible)
+                        {
+							item2.Interrupt();
+                        }
+					}
+				}
 			}
 		}
 
@@ -144,7 +156,7 @@ namespace Game.Control
 			bool onGround = movementBehavior.OnGround;
 			if (!IsActiveAny())
 			{
-				movementBehavior.ScaleFlipFromDirection(transform);
+				movementBehavior.ScaleFlipFromDirection();
 
 				if (movementBehavior.Direction == MovingDirection.idle)
 				{
@@ -163,5 +175,5 @@ namespace Game.Control
 
 			anim.SetBool(AnimatorArgs.onGround, onGround);
 		}
-	}
+    }
 }

@@ -41,7 +41,7 @@ Material:
     - Vector1_d2aaceb0151f4bab8a30c936748c318a: 10
     - Vector1_e32ecd7dd0c84df1b2205b30831cea50: 2
     - Vector1_ffbdf0d7a1634cbeb8962b77257aaa6b: 5
-    - _FadeTime: -0.009198045
+    - _FadeTime: -0.020931203
     m_Colors:
     - Vector2_c85065f4f65a4300926fd1d2bf09398d: {r: 0.6, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

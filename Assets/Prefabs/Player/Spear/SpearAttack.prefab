@@ -56,6 +56,9 @@ MonoBehaviour:
   - {fileID: 3052280796665083334}
   - {fileID: 7314914375985729192}
   maxTimeBetweenAttacks: 1
+  activeTime: 0.35
+  minTimeForQueue: 0
+  queueNextAttackWhenReady: 0
 --- !u!82 &122654653630841299
 AudioSource:
   m_ObjectHideFlags: 0

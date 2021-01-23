@@ -55,7 +55,7 @@ namespace Game.Control
         public void Interrupt()
         {
             StopCoroutine(co);
-            StopAttack();
+            SetEnabledState(false);
         }
 
         private IEnumerator StartAttack(float waitTime)
