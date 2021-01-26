@@ -1,7 +1,6 @@
 ﻿using Cinemachine;
 using Game.Animation;
 using Game.Base;
-using UnityEditor;
 using UnityEngine;
 
 namespace Game.Control
@@ -11,23 +10,23 @@ namespace Game.Control
     /// </summary>
     public class DashBehavior : BehaviorBase
     {
-        Animator anim;
-        Rigidbody2D rb;
-        Collider2D col;
-        CinemachineImpulseSource impulseSrc;
+        private Animator anim;
+        private Rigidbody2D rb;
+        private Collider2D col;
+        private CinemachineImpulseSource impulseSrc;
 
-        MovingDirection direction = MovingDirection.idle;
+        private MovingDirection direction = MovingDirection.idle;
 
-        bool aKey;
-        bool dKey;
-        bool active;
+        private bool aKey;
+        private bool dKey;
+        private bool active;
 
-        float initialGrav;
-        float timeSinceLastAKey;
-        float timeSinceLastDKey;
-        float speedTime;
+        private float initialGrav;
+        private float timeSinceLastAKey;
+        private float timeSinceLastDKey;
+        private float speedTime;
 
-        [SerializeField] DashData data;
+        [SerializeField] private DashData data;
 
         private void Awake()
         {
@@ -80,16 +79,16 @@ namespace Game.Control
                     float vResolvingDistance = col.bounds.extents.y;
                     Vector2 point = new Vector2();
                     point.x = col.bounds.center.x + col.bounds.extents.x * (int)direction;
-                    point.y = col.bounds.min.y + vResolvingDistance/2;
+                    point.y = col.bounds.min.y + vResolvingDistance / 2;
                     Collider2D[] collider2Ds = new Collider2D[2];
                     Vector2 size = new Vector2();
                     size.x = data.castDistance;
                     size.y = vResolvingDistance - data.colliderEdge;
-                    int overlapCount = Physics2D.OverlapBoxNonAlloc(point, size, 
+                    int overlapCount = Physics2D.OverlapBoxNonAlloc(point, size,
                         0, collider2Ds, GameLayers.ground);
                     if (overlapCount > 0)
                     {
-                        point.y = col.bounds.center.y + vResolvingDistance/2;
+                        point.y = col.bounds.center.y + vResolvingDistance / 2;
                         size.y = col.bounds.size.y - vResolvingDistance - data.colliderEdge;
                         overlapCount = Physics2D.OverlapBoxNonAlloc(point, size,
                             0, collider2Ds, GameLayers.ground);

@@ -1,7 +1,7 @@
 using System;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
+using UnityEngine;
 
 namespace Game
 {
@@ -35,4 +35,3 @@ namespace Game
         }
     }
 }
-

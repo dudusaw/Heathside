@@ -6,21 +6,21 @@ namespace Game.Control
 {
     public class SpearAttackBase : MonoBehaviour
     {
-        [SerializeField] SpriteRenderer swing;
-        [SerializeField] SpriteRenderer spear;
-        [SerializeField] Collider2D hitArea;
-        [SerializeField] AudioClip audioClip;
-        [SerializeField] [Tooltip("Set to 0 to inherit")] float activeTime;
-        [SerializeField] string animationName;
+        [SerializeField] private SpriteRenderer swing;
+        [SerializeField] private SpriteRenderer spear;
+        [SerializeField] private Collider2D hitArea;
+        [SerializeField] private AudioClip audioClip;
+        [SerializeField] [Tooltip("Set to 0 to inherit")] private float activeTime;
+        [SerializeField] private string animationName;
 
-        Animator anim;
-        Material swingMat;
-        AudioSource swingAudio;
-        Coroutine co;
+        private Animator anim;
+        private Material swingMat;
+        private AudioSource swingAudio;
+        private Coroutine co;
 
-        int animHash;
+        private int animHash;
 
-        static readonly int shaderTimeID = Shader.PropertyToID("_FadeTime");
+        private static readonly int shaderTimeID = Shader.PropertyToID("_FadeTime");
 
         public bool IsActive { get; private set; }
 
@@ -86,5 +86,4 @@ namespace Game.Control
             SetEnabledState(false);
         }
     }
-
 }

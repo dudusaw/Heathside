@@ -91,7 +91,7 @@ namespace Game
 
         public static float EaseOut(float u, float eMod = 2)
         {
-            return 1 - Mathf.Pow(1-u, eMod);
+            return 1 - Mathf.Pow(1 - u, eMod);
         }
 
         public static float EaseInOut(float u, float eMod = 2)
@@ -107,4 +107,3 @@ namespace Game
         }
     }
 }
-

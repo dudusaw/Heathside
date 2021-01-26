@@ -20,6 +20,4 @@ namespace Game.Base
             pooledObject.owner.ReturnObject(gameObject);
         }
     }
-
 }
-

@@ -10,19 +10,21 @@ namespace Game.Saving
     public interface ISaveable
     {
         string SaveID { get; }
+
         /// <summary>
         /// All saved objects must have a [System.Serializable] attribute or be serializable by default like primitive types.
         /// </summary>
         object SavedData { get; }
+
         void LoadFromData(object data);
     }
 
     public static class SavingService
     {
-        const string ACTIVE_SCENE_KEY = "activeScene";
-        const string SCENES_KEY = "scenes";
-        static UnityEngine.Events.UnityAction<Scene, LoadSceneMode> LoadObjectsAfterSceneLoad;
-        static IFormatter formatter;
+        private const string ACTIVE_SCENE_KEY = "activeScene";
+        private const string SCENES_KEY = "scenes";
+        private static UnityEngine.Events.UnityAction<Scene, LoadSceneMode> LoadObjectsAfterSceneLoad;
+        private static IFormatter formatter;
 
         static SavingService()
         {
@@ -174,4 +176,3 @@ namespace Game.Saving
         }
     }
 }
-

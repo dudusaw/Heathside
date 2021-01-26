@@ -9,8 +9,10 @@ namespace Game.Control
     {
         [SerializeField]
         private Collider2D hitArea;
+
         [SerializeField]
         private Collider2D hitAreaExtended;
+
         [SerializeField]
         private GameObject slash;
 
@@ -23,6 +25,7 @@ namespace Game.Control
 
         [SerializeField, Tooltip("Maximum gap beetwen 2 combo attack before reset")]
         private float maxDelayBetweenAttacks = 1f;
+
         [SerializeField, Tooltip("Minimum time before being able to attack again")]
         private float minDelayBetweenAttacks = 0.5f;
 
@@ -120,7 +123,8 @@ namespace Game.Control
             throw new System.NotImplementedException();
         }
     }
-    abstract class SwordAttackState : BaseAttackState
+
+    internal abstract class SwordAttackState : BaseAttackState
     {
         protected float attackDamage;
 
@@ -137,7 +141,7 @@ namespace Game.Control
         }
     }
 
-    class Attack_1 : SwordAttackState
+    internal class Attack_1 : SwordAttackState
     {
         public Attack_1(AttackInfo info) : base(info)
         {
@@ -147,7 +151,7 @@ namespace Game.Control
         public override void StartAttack() => anim.Play(AnimatorArgs.Player_sword_attack1);
     }
 
-    class Attack_2 : SwordAttackState
+    internal class Attack_2 : SwordAttackState
     {
         public Attack_2(AttackInfo info) : base(info)
         {
@@ -157,7 +161,7 @@ namespace Game.Control
         public override void StartAttack() => anim.Play(AnimatorArgs.Player_sword_attack2);
     }
 
-    class Attack_3 : SwordAttackState
+    internal class Attack_3 : SwordAttackState
     {
         private Animator slashAnimator;
         private SpriteRenderer slashRend;

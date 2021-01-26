@@ -5,28 +5,27 @@ using UnityEngine.UI;
 
 namespace Game.Items
 {
-    public class InventorySlot : MonoBehaviour, 
-        IDragHandler, IEndDragHandler, IBeginDragHandler
+    public class InventorySlot : MonoBehaviour,
+        IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler
     {
-        [SerializeField] Image iconImage;
-        [SerializeField] Item _item;
-        [SerializeField] int count = 1;
-        [SerializeField] TextMeshProUGUI textMesh;
+        [SerializeField] private Image iconImage;
+        [SerializeField] private Item _item;
+        [SerializeField] private int count = 1;
+        [SerializeField] private TextMeshProUGUI textMesh;
+        [SerializeField] private bool isEquipSlot;
 
-        bool hasTextMesh;
-        public Item Item 
-        {
-            get => _item;
-            private set
-            {
-                _item = value;
-            }
-        }
+        private bool hasTextMesh;
+        private InventoryManager manager;
 
         private void Awake()
         {
             hasTextMesh = textMesh != null;
             UpdateIcon();
+        }
+
+        public void Construct(InventoryManager manager, GameObject owner)
+        {
+            this.manager = manager;
         }
 
         public void UpdateIcon()
@@ -45,7 +44,7 @@ namespace Game.Items
             else
             {
                 iconImage.enabled = true;
-                iconImage.sprite = _item.icon;
+                iconImage.sprite = _item.Icon;
                 if (hasTextMesh)
                 {
                     textMesh.enabled = true;
@@ -55,18 +54,27 @@ namespace Game.Items
             }
         }
 
+        public bool IsEquipSlot { get => isEquipSlot; }
+
+        public Item Item
+        {
+            get => _item;
+            set => _item = value;
+        }
+
         public bool IsEmpty { get; private set; }
 
-        public int Count { get => count; }
+        public int Count { get => count; set => count = value; }
 
         public bool AddItemToStack(Item newItem, in int newItemCount, out int itemsCountLeft)
         {
             itemsCountLeft = 0;
-            if (newItem == Item)
+            if (newItem == Item && count < Item.MaxStack)
             {
                 int sum = Count + newItemCount;
-                count = Mathf.Clamp(sum, 0, Item.maxStack);
+                count = Mathf.Clamp(sum, 0, Item.MaxStack);
                 itemsCountLeft = sum - Count;
+                UpdateIcon();
                 return true;
             }
             return false;
@@ -77,15 +85,11 @@ namespace Game.Items
             if (IsEmpty)
             {
                 count = newCount;
-                Item = newItem;
+                _item = newItem;
+                UpdateIcon();
                 return true;
             }
             return false;
-        }
-
-        public void RemoveItem()
-        {
-            Item = null;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -103,31 +107,38 @@ namespace Game.Items
                 var slot = go.GetComponent<InventorySlot>();
                 if (slot != null && slot != this)
                 {
-                    if (slot.AddItemToStack(Item, count, out int countLeft))
+                    var equipItemCheck = !(!(Item is EquipItem) && slot.IsEquipSlot);
+                    if (equipItemCheck)
                     {
-                        if (countLeft == 0)
+                        if (slot.AddItemToStack(Item, count, out int countLeft))
                         {
-                            RemoveItem();
+                            if (countLeft == 0)
+                            {
+                                Item = null;
+                            }
+                            else
+                            {
+                                count = countLeft;
+                            }
                         }
-                        else
+                        else if (slot.AddItemIfEmpty(Item, count))
                         {
-                            count = countLeft;
+                            Item = null;
                         }
-                    } 
+                        UpdateIcon();
+                        slot.UpdateIcon();
+                    }
                     else
                     {
-                        slot.AddItemIfEmpty(Item, count);
-                        RemoveItem();
+                        // Trying to put non equipable item in the equip slot
+                        Debug.Log("Can't put it here");
                     }
-                    UpdateIcon();
-                    slot.UpdateIcon();
                 }
-            } 
+            }
             else
             {
-                // Pulled slot out of inventory
+                // Pulled slot out of the inventory, probably we would delete it
             }
-            
 
             iconImage.transform.SetParent(transform, true);
             iconImage.transform.SetAsFirstSibling();
@@ -139,6 +150,13 @@ namespace Game.Items
             if (IsEmpty) return;
             iconImage.transform.SetParent(transform.parent.parent, true);
             iconImage.transform.SetAsLastSibling();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (IsEmpty) return;
+            manager.UseItem(this);
+            UpdateIcon();
         }
     }
 }

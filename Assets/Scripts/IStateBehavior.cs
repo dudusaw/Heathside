@@ -5,7 +5,7 @@ namespace Game.Control
     public interface IStateBehavior
     {
         /// <summary>
-        /// Called every frame when it should update its state. 
+        /// Called every frame when it should update its state.
         /// It can update its generic state (timing etc.) in default update.
         /// </summary>
 		void StateUpdate();
@@ -35,14 +35,15 @@ namespace Game.Control
     [System.Serializable]
     public struct MovementAbility
     {
-        [SerializeField] bool influenceSpeed;
-        [SerializeField] float desiredSpeed;
+        [SerializeField] private bool influenceSpeed;
+        [SerializeField] private float desiredSpeed;
 
         /// <summary>
         /// true if object that has the behavior should change the speed to the desired.
         /// If false, the speed of an object will not be affected by this behavior
         /// </summary>
         public readonly bool InfluenceSpeed { get => influenceSpeed; }
+
         /// <summary>
         /// Controls the speed of owner object if InfluenceSpeed is true
         /// </summary>

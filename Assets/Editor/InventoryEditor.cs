@@ -1,6 +1,6 @@
-using UnityEngine;
-using UnityEditor;
 using Game.Items;
+using UnityEditor;
+using UnityEngine;
 
 namespace Game
 {
@@ -25,4 +25,3 @@ namespace Game
         }
     }
 }
-

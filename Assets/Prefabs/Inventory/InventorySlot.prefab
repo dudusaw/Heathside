@@ -51,11 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a2ba5ebe55435d4bb7d2c74ed5d1e57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equipSlot: 0
   iconImage: {fileID: 5759657010367889976}
-  text: {fileID: 0}
   _item: {fileID: 0}
   count: 0
+  textMesh: {fileID: 0}
+  isEquipSlot: 0
 --- !u!222 &4868273383128178149
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 2
+  m_PixelsPerUnitMultiplier: 3
 --- !u!1 &5759657010367889978
 GameObject:
   m_ObjectHideFlags: 0

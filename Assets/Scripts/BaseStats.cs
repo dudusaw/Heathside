@@ -4,11 +4,11 @@ namespace Game.Base
 {
     public class BaseStats : MonoBehaviour
     {
-        [SerializeField] float hp;
-        [SerializeField] float maxHp;
-        [SerializeField] float baseAttack;
-        [SerializeField] float baseCrit;
-        [SerializeField] float baseCritChance;
+        [SerializeField] private float hp;
+        [SerializeField] private float maxHp;
+        [SerializeField] private float baseAttack;
+        [SerializeField] private float baseCrit;
+        [SerializeField] private float baseCritChance;
 
         private void Start()
         {
@@ -20,6 +20,7 @@ namespace Game.Base
             get => hp;
             private set => hp = value;
         }
+
         public float maxHealthPoints
         {
             get => maxHp;
@@ -30,6 +31,7 @@ namespace Game.Base
         {
             hp = Mathf.Max(0, hp - amount);
         }
+
         public void Heal(float amount)
         {
             hp = Mathf.Min(maxHp, hp + amount);
