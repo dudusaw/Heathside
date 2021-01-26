@@ -1,15 +1,13 @@
 using Game.Animation;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Control
 {
     public class BowAttackBehavior : MonoBehaviour, IStateBehavior
     {
-        Animator anim;
-        SpriteRenderer rend;
-        bool active;
+        private Animator anim;
+        private SpriteRenderer rend;
+        private bool active;
 
         private void Start()
         {
@@ -65,4 +63,3 @@ namespace Game.Control
         }
     }
 }
-

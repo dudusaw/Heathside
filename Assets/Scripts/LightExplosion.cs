@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Base
@@ -7,26 +6,27 @@ namespace Game.Base
     public class LightExplosion : MonoBehaviour
     {
         [SerializeField]
-        float speed = 1f;
+        private float speed = 1f;
+
         [SerializeField]
-        float maxScale = 2f;
+        private float maxScale = 2f;
 
         [SerializeField]
         [Range(0.95f, 0.99999f)]
-        float snapStart;
+        private float snapStart;
 
         [SerializeField]
         [Range(2, 4)]
-        int exp;
+        private int exp;
 
-        Vector3 initScale;
+        private Vector3 initScale;
 
         private void Start()
         {
             initScale = transform.localScale;
         }
 
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.V))
             {
@@ -35,7 +35,7 @@ namespace Game.Base
             }
         }
 
-        IEnumerator StartExp()
+        private IEnumerator StartExp()
         {
             transform.localScale = initScale;
             while (transform.localScale.x <= maxScale)
@@ -59,7 +59,7 @@ namespace Game.Base
             }
         }
 
-        void SetScale(float u)
+        private void SetScale(float u)
         {
             Vector3 res = transform.localScale;
             res.Set(u, u, u);

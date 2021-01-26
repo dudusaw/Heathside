@@ -6,14 +6,15 @@ namespace Game.Base
     public interface IObjectPoolNotifier
     {
         void OnEnqueuedToPool();
+
         void OnCreatedOrDequeuedFromPool(bool created);
     }
 
     public class ObjectPool : MonoBehaviour
     {
-        [SerializeField] GameObject prefab;
+        [SerializeField] private GameObject prefab;
 
-        Queue<GameObject> inactiveObjects = new Queue<GameObject>();
+        private Queue<GameObject> inactiveObjects = new Queue<GameObject>();
 
         public GameObject GetObject()
         {
@@ -58,4 +59,3 @@ namespace Game.Base
         }
     }
 }
-

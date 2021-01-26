@@ -6,7 +6,9 @@ namespace Game.Animation
     public class AnimationEvents : StateMachineBehaviour
     {
         public event Action exitEvent;
+
         public event Action enterEvent;
+
         public event Action updateEvent;
 
         // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state

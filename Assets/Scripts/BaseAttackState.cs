@@ -19,7 +19,9 @@ namespace Game.Control
     public interface IAttackState
     {
         void StartAttack();
+
         void ProcessAttack();
+
         IAttackState NextState { get; set; }
     }
 
@@ -54,7 +56,9 @@ namespace Game.Control
         }
 
         public abstract void StartAttack();
+
         public abstract void ProcessAttack();
+
         public IAttackState NextState
         {
             get;

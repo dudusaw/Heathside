@@ -1,22 +1,19 @@
 using Game.Base;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Control
 {
     public class MovementBehavior : MonoBehaviour
     {
-        [SerializeField] PlayerData data;
+        [SerializeField] private PlayerData data;
 
-        float inputX;
+        private float inputX;
 
-        Rigidbody2D rb;
-        Collider2D col;
+        private Rigidbody2D rb;
+        private Collider2D col;
 
-        MovingDirection lastDirection = MovingDirection.right;
-        MovingDirection movingDirection = MovingDirection.idle;
+        private MovingDirection lastDirection = MovingDirection.right;
+        private MovingDirection movingDirection = MovingDirection.idle;
 
         public bool CanMove { get; set; }
         public bool OnGround { get; private set; }
@@ -34,7 +31,8 @@ namespace Game.Control
             {
                 TestGrounded();
                 UpdateMoving(inputX);
-            } else
+            }
+            else
             {
                 UpdateMoving(0);
             }
@@ -67,7 +65,8 @@ namespace Game.Control
             }
         }
 
-        public void UpdateInputX() {
+        public void UpdateInputX()
+        {
             UpdateInputX(data.speed);
         }
 
@@ -78,9 +77,10 @@ namespace Game.Control
             if (axis == 0)
             {
                 movingDirection = MovingDirection.idle;
-            } else
+            }
+            else
             {
-                movingDirection = (MovingDirection) Mathf.Sign(axis);
+                movingDirection = (MovingDirection)Mathf.Sign(axis);
             }
         }
 
@@ -92,10 +92,12 @@ namespace Game.Control
                 case MovingDirection.idle:
                     scale.x = (int)lastDirection * Mathf.Abs(scale.x);
                     break;
+
                 case MovingDirection.left:
                     scale.x = -Mathf.Abs(scale.x);
                     lastDirection = MovingDirection.left;
                     break;
+
                 case MovingDirection.right:
                     scale.x = Mathf.Abs(scale.x);
                     lastDirection = MovingDirection.right;
@@ -104,5 +106,4 @@ namespace Game.Control
             transform.localScale = scale;
         }
     }
-
 }

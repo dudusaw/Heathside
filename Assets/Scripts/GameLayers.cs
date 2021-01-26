@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Base
+namespace Game
 {
     public static class GameLayers
     {

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game
@@ -7,9 +5,9 @@ namespace Game
     public class ScreenCameraSettings : MonoBehaviour
     {
         [SerializeField]
-        RenderTexture tex;
+        private RenderTexture tex;
 
-        void Start()
+        private void Start()
         {
             Renderer imageRenderer = GetComponentInChildren<Renderer>();
             Shader.SetGlobalTexture(Shader.PropertyToID("_ScreenTex"), tex);

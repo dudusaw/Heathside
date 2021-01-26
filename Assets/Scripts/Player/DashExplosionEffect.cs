@@ -1,21 +1,19 @@
-using Game.Base;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Control
 {
     public class DashExplosionEffect : MonoBehaviour
     {
-        [SerializeField] float maxScale = 2f;
-        [SerializeField] float initialScale = 0.1f;
-        [SerializeField] float speed = 5f;
+        [SerializeField] private float maxScale = 2f;
+        [SerializeField] private float initialScale = 0.1f;
+        [SerializeField] private float speed = 5f;
 
-        SpriteRenderer mat;
-        static readonly int timeProperty = Shader.PropertyToID("_FadeTime");
+        private SpriteRenderer mat;
+        private static readonly int timeProperty = Shader.PropertyToID("_FadeTime");
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             mat = GetComponent<SpriteRenderer>();
         }
@@ -42,4 +40,3 @@ namespace Game.Control
         }
     }
 }
-

@@ -9,14 +9,14 @@ namespace Game.AI
         /// <summary>
         /// Function get called each frame with time constraint. It should return if the limit has reached.
         /// </summary>
-        /// <param name="ticksToRun">Available time for this behavior to process in the particular frame. 
+        /// <param name="ticksToRun">Available time for this behavior to process in the particular frame.
         /// Counting in ticks, 1 tick is 100 nanoseconds (10mil ticks is 1 second)</param>
         void Run(long ticksToRun);
     }
 
     public class LoadBalancingSheduler : RunBehavior
     {
-        readonly struct BehaviorRecord
+        private readonly struct BehaviorRecord
         {
             public readonly RunBehavior func;
             public readonly int frequency;
@@ -30,11 +30,11 @@ namespace Game.AI
             }
         }
 
-        const int framesToCheck = 15;
+        private const int framesToCheck = 15;
 
-        List<BehaviorRecord> records = new List<BehaviorRecord>();
-        Stopwatch stopwatch = new Stopwatch();
-        int frame;
+        private List<BehaviorRecord> records = new List<BehaviorRecord>();
+        private Stopwatch stopwatch = new Stopwatch();
+        private int frame;
 
         public void AddBehavior(RunBehavior func, int frequency, int phase)
         {

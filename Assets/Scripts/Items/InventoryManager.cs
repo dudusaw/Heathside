@@ -5,9 +5,9 @@ namespace Game.Items
 {
     public class InventoryManager : MonoBehaviour
     {
-        List<InventorySlot> slots = new List<InventorySlot>();
-        List<InventorySlot> equipSlots = new List<InventorySlot>();
-        [SerializeField] GameObject owner;
+        private List<InventorySlot> slots = new List<InventorySlot>();
+        private List<InventorySlot> equipSlots = new List<InventorySlot>();
+        [SerializeField] private GameObject owner;
 
         private void Awake()
         {
@@ -17,22 +17,23 @@ namespace Game.Items
                 if (item.IsEquipSlot)
                 {
                     equipSlots.Add(item);
-                } else
+                }
+                else
                 {
                     slots.Add(item);
                 }
                 item.Construct(this, owner);
             }
-            int eqSlotsEnumLength = System.Enum.GetValues(typeof(EquipableSlot)).Length;
+            int eqSlotsEnumLength = System.Enum.GetValues(typeof(EquipSlot)).Length;
             if (eqSlotsEnumLength != equipSlots.Count)
             {
                 Debug.LogError($"EquipableSlot enum length ({eqSlotsEnumLength}) is not equals equipSlots.Count ({equipSlots.Count})");
             }
         }
 
-        public bool AddItem(Item item, int count)
+        public bool AddItemToInventory(Item item, int count)
         {
-            if (item.maxStack > 1)
+            if (item.MaxStack > 1)
             {
                 foreach (var slot in slots)
                 {
@@ -41,7 +42,7 @@ namespace Game.Items
                         if (countLeft > 0)
                         {
                             count = countLeft;
-                        } 
+                        }
                         else
                         {
                             return true;
@@ -60,17 +61,28 @@ namespace Game.Items
             return false;
         }
 
-        public void EquipItem(EquipableItem item)
+        public void UseItem(InventorySlot slot)
         {
-            int index = (int)item.Slot;
-            var slot = equipSlots[index];
-            if (!slot.AddItemIfEmpty(item, 1))
+            if (slot.Item is EquipItem eqItem)
             {
-                var oldItem = slot.Item;
-                slot.Item = item;
-                AddItem(oldItem, 1);
+                var eqSlot = equipSlots[(int)eqItem.Slot];
+                if (slot == eqSlot)
+                {
+                    slot.Item = null;
+                    AddItemToInventory(eqItem, 1);
+                }
+                else if (eqSlot.AddItemIfEmpty(eqItem, 1))
+                {
+                    slot.Item = null;
+                }
+                else
+                {
+                    var oldItem = eqSlot.Item;
+                    eqSlot.Item = eqItem;
+                    slot.Item = null;
+                    AddItemToInventory(oldItem, 1);
+                }
             }
-            slot.UpdateIcon();
         }
     }
 }

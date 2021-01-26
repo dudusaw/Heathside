@@ -1,23 +1,21 @@
 using Game.Base;
-using Game.Saving;
 using System.Collections;
 using UnityEngine;
 
 namespace Game.Control
 {
-
     public class SpearAttackBehavior : BehaviorBase
     {
-        [SerializeField] SpearAttackBase[] attacks;
-        [SerializeField] float maxTimeBetweenAttacks;
-        [SerializeField] float activeTime;
-        [SerializeField] float minTimeForQueue;
-        [SerializeField] bool queueNextAttackWhenReady;
+        [SerializeField] private SpearAttackBase[] attacks;
+        [SerializeField] private float maxTimeBetweenAttacks;
+        [SerializeField] private float activeTime;
+        [SerializeField] private float minTimeForQueue;
+        [SerializeField] private bool queueNextAttackWhenReady;
 
-        int prevAttack;
-        int nextAttack;
-        float timeSinceLastAttack;
-        bool queueCoStarted;
+        private int prevAttack;
+        private int nextAttack;
+        private float timeSinceLastAttack;
+        private bool queueCoStarted;
 
         private void Awake()
         {
@@ -81,5 +79,4 @@ namespace Game.Control
             queueCoStarted = false;
         }
     }
-
 }

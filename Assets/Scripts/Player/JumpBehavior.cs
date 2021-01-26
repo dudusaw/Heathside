@@ -3,18 +3,17 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-
 namespace Game.Control
 {
     public class JumpBehavior : MonoBehaviour
     {
-        [SerializeField] PlayerData data;
+        [SerializeField] private PlayerData data;
 
-        bool jumpCoroStarted;
-        Func<bool> onGround;
+        private bool jumpCoroStarted;
+        private Func<bool> onGround;
 
-        Rigidbody2D rb;
-        Animator anim;
+        private Rigidbody2D rb;
+        private Animator anim;
 
         private void Awake()
         {
@@ -48,7 +47,7 @@ namespace Game.Control
             anim.Play(AnimatorArgs.Player_jump);
         }
 
-        // These two functions below allow the player to press jump slightly before he lands, 
+        // These two functions below allow the player to press jump slightly before he lands,
         // and then actually jump when he can with a specified delay either in frames or seconds.
         private IEnumerator FrameDelayedJump(int frameCount)
         {
@@ -82,4 +81,3 @@ namespace Game.Control
         }
     }
 }
-

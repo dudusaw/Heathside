@@ -5,18 +5,17 @@ using UnityEngine.UI;
 
 namespace Game.Items
 {
-    public class InventorySlot : MonoBehaviour, 
+    public class InventorySlot : MonoBehaviour,
         IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler
     {
-        [SerializeField] Image iconImage;
-        [SerializeField] Item _item;
-        [SerializeField] int count = 1;
-        [SerializeField] TextMeshProUGUI textMesh;
-        [SerializeField] bool isEquipSlot;
+        [SerializeField] private Image iconImage;
+        [SerializeField] private Item _item;
+        [SerializeField] private int count = 1;
+        [SerializeField] private TextMeshProUGUI textMesh;
+        [SerializeField] private bool isEquipSlot;
 
-        bool hasTextMesh;
-        InventoryManager manager;
-        GameObject owner;
+        private bool hasTextMesh;
+        private InventoryManager manager;
 
         private void Awake()
         {
@@ -27,7 +26,6 @@ namespace Game.Items
         public void Construct(InventoryManager manager, GameObject owner)
         {
             this.manager = manager;
-            this.owner = owner;
         }
 
         public void UpdateIcon()
@@ -46,7 +44,7 @@ namespace Game.Items
             else
             {
                 iconImage.enabled = true;
-                iconImage.sprite = _item.icon;
+                iconImage.sprite = _item.Icon;
                 if (hasTextMesh)
                 {
                     textMesh.enabled = true;
@@ -71,11 +69,12 @@ namespace Game.Items
         public bool AddItemToStack(Item newItem, in int newItemCount, out int itemsCountLeft)
         {
             itemsCountLeft = 0;
-            if (newItem == Item)
+            if (newItem == Item && count < Item.MaxStack)
             {
                 int sum = Count + newItemCount;
-                count = Mathf.Clamp(sum, 0, Item.maxStack);
+                count = Mathf.Clamp(sum, 0, Item.MaxStack);
                 itemsCountLeft = sum - Count;
+                UpdateIcon();
                 return true;
             }
             return false;
@@ -86,15 +85,11 @@ namespace Game.Items
             if (IsEmpty)
             {
                 count = newCount;
-                Item = newItem;
+                _item = newItem;
+                UpdateIcon();
                 return true;
             }
             return false;
-        }
-
-        public void RemoveItem()
-        {
-            Item = null;
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -112,23 +107,23 @@ namespace Game.Items
                 var slot = go.GetComponent<InventorySlot>();
                 if (slot != null && slot != this)
                 {
-                    var equipItemCheck = !(!(Item is EquipableItem) && slot.IsEquipSlot);
+                    var equipItemCheck = !(!(Item is EquipItem) && slot.IsEquipSlot);
                     if (equipItemCheck)
                     {
                         if (slot.AddItemToStack(Item, count, out int countLeft))
                         {
                             if (countLeft == 0)
                             {
-                                RemoveItem();
+                                Item = null;
                             }
                             else
                             {
                                 count = countLeft;
                             }
-                        } 
+                        }
                         else if (slot.AddItemIfEmpty(Item, count))
                         {
-                            RemoveItem();
+                            Item = null;
                         }
                         UpdateIcon();
                         slot.UpdateIcon();
@@ -139,12 +134,11 @@ namespace Game.Items
                         Debug.Log("Can't put it here");
                     }
                 }
-            } 
+            }
             else
             {
                 // Pulled slot out of the inventory, probably we would delete it
             }
-            
 
             iconImage.transform.SetParent(transform, true);
             iconImage.transform.SetAsFirstSibling();
@@ -161,7 +155,8 @@ namespace Game.Items
         public void OnPointerClick(PointerEventData eventData)
         {
             if (IsEmpty) return;
-            Item.Use(manager, owner);
+            manager.UseItem(this);
+            UpdateIcon();
         }
     }
 }

@@ -5,6 +5,7 @@ namespace Game.Saving
     public abstract class SaveableBehaviour : MonoBehaviour, ISaveable, ISerializationCallbackReceiver
     {
         public abstract object SavedData { get; }
+
         public abstract void LoadFromData(object data);
 
         public string SaveID
@@ -36,4 +37,3 @@ namespace Game.Saving
         }
     }
 }
-

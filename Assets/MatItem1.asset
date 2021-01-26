@@ -14,4 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: -8413939493391951786, guid: 0b69dc6281165a54bb53e66d7de676b2, type: 3}
   itemName: testMaterial
-  maxStack: 16
+  rarity: 0
+  description: 
+  maxStack: 13

@@ -8,7 +8,6 @@ namespace Game
     /// </summary>
     public static class CInput
     {
-
         public static bool GetMouseButtonDownNonUI(int button)
         {
             return Input.GetMouseButtonDown(button) && PointerIsNotOverUI();
@@ -24,5 +23,4 @@ namespace Game
             return !EventSystem.current.IsPointerOverGameObject();
         }
     }
-
 }

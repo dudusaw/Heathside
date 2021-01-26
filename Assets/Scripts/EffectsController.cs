@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -9,16 +7,18 @@ namespace Game.Base
     public class EffectsController : MonoBehaviour
     {
         [SerializeField]
-        float minBloom = 20f;
-        [SerializeField]
-        float maxDeviation = 20f;
-        [SerializeField]
-        float changeSpeed = 1f;
+        private float minBloom = 20f;
 
-        Volume volume;
-        MinFloatParameter bloomIntense;
+        [SerializeField]
+        private float maxDeviation = 20f;
 
-        void Start()
+        [SerializeField]
+        private float changeSpeed = 1f;
+
+        private Volume volume;
+        private MinFloatParameter bloomIntense;
+
+        private void Start()
         {
             volume = GetComponent<Volume>();
             if (volume.sharedProfile.TryGet(out Bloom bloom))
@@ -27,7 +27,7 @@ namespace Game.Base
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (bloomIntense != null)
             {
@@ -36,4 +36,3 @@ namespace Game.Base
         }
     }
 }
-

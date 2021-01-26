@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Items
 {
+    public enum ItemRarity
+    {
+        Common,
+        Rare,
+        Legendary
+    }
 
     public abstract class Item : ScriptableObject
     {
-        [SerializeField] public Sprite icon;
-        [SerializeField] public string itemName;
-        [SerializeField] [TextArea] public string description;
-        [SerializeField] [Range(1, 16)] public int maxStack = 1;
+        [SerializeField] private Sprite icon;
+        [SerializeField] private string itemName;
+        [SerializeField] private ItemRarity rarity;
+        [SerializeField] [TextArea] private string description;
+        [SerializeField] [Range(1, 16)] private int maxStack = 1;
 
-        public abstract void Use(InventoryManager manager, GameObject ownerObject);
+        public Sprite Icon { get => icon; protected set => icon = value; }
+        public string ItemName { get => itemName; protected set => itemName = value; }
+        public ItemRarity Rarity { get => rarity; protected set => rarity = value; }
+        public string Description { get => description; protected set => description = value; }
+        public int MaxStack { get => maxStack; protected set => maxStack = value; }
+
+        public abstract void Use(GameObject ownerObject);
     }
-
 }
