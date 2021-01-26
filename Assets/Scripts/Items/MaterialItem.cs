@@ -7,7 +7,7 @@ namespace Game.Items
     [CreateAssetMenu(menuName = "Game/MaterialItem")]
     public class MaterialItem : Item
     {
-        public override void Use()
+        public override void Use(InventoryManager manager, GameObject owner)
         {
         }
     }

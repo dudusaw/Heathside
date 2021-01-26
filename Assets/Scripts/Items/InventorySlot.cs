@@ -6,27 +6,28 @@ using UnityEngine.UI;
 namespace Game.Items
 {
     public class InventorySlot : MonoBehaviour, 
-        IDragHandler, IEndDragHandler, IBeginDragHandler
+        IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler
     {
         [SerializeField] Image iconImage;
         [SerializeField] Item _item;
         [SerializeField] int count = 1;
         [SerializeField] TextMeshProUGUI textMesh;
+        [SerializeField] bool isEquipSlot;
 
         bool hasTextMesh;
-        public Item Item 
-        {
-            get => _item;
-            private set
-            {
-                _item = value;
-            }
-        }
+        InventoryManager manager;
+        GameObject owner;
 
         private void Awake()
         {
             hasTextMesh = textMesh != null;
             UpdateIcon();
+        }
+
+        public void Construct(InventoryManager manager, GameObject owner)
+        {
+            this.manager = manager;
+            this.owner = owner;
         }
 
         public void UpdateIcon()
@@ -55,9 +56,17 @@ namespace Game.Items
             }
         }
 
+        public bool IsEquipSlot { get => isEquipSlot; }
+
+        public Item Item
+        {
+            get => _item;
+            set => _item = value;
+        }
+
         public bool IsEmpty { get; private set; }
 
-        public int Count { get => count; }
+        public int Count { get => count; set => count = value; }
 
         public bool AddItemToStack(Item newItem, in int newItemCount, out int itemsCountLeft)
         {
@@ -103,29 +112,37 @@ namespace Game.Items
                 var slot = go.GetComponent<InventorySlot>();
                 if (slot != null && slot != this)
                 {
-                    if (slot.AddItemToStack(Item, count, out int countLeft))
+                    var equipItemCheck = !(!(Item is EquipableItem) && slot.IsEquipSlot);
+                    if (equipItemCheck)
                     {
-                        if (countLeft == 0)
+                        if (slot.AddItemToStack(Item, count, out int countLeft))
+                        {
+                            if (countLeft == 0)
+                            {
+                                RemoveItem();
+                            }
+                            else
+                            {
+                                count = countLeft;
+                            }
+                        } 
+                        else if (slot.AddItemIfEmpty(Item, count))
                         {
                             RemoveItem();
                         }
-                        else
-                        {
-                            count = countLeft;
-                        }
-                    } 
+                        UpdateIcon();
+                        slot.UpdateIcon();
+                    }
                     else
                     {
-                        slot.AddItemIfEmpty(Item, count);
-                        RemoveItem();
+                        // Trying to put non equipable item in the equip slot
+                        Debug.Log("Can't put it here");
                     }
-                    UpdateIcon();
-                    slot.UpdateIcon();
                 }
             } 
             else
             {
-                // Pulled slot out of inventory
+                // Pulled slot out of the inventory, probably we would delete it
             }
             
 
@@ -139,6 +156,12 @@ namespace Game.Items
             if (IsEmpty) return;
             iconImage.transform.SetParent(transform.parent.parent, true);
             iconImage.transform.SetAsLastSibling();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (IsEmpty) return;
+            Item.Use(manager, owner);
         }
     }
 }

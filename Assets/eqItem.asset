@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   icon: {fileID: 1755220452038936823, guid: 0b69dc6281165a54bb53e66d7de676b2, type: 3}
   itemName: sword
+  description: 
   maxStack: 1
   slot: 0

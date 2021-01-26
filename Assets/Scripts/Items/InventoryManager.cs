@@ -1,46 +1,55 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace Game.Items
 {
     public class InventoryManager : MonoBehaviour
     {
         List<InventorySlot> slots = new List<InventorySlot>();
-        List<EquipSlot> equipSlots = new List<EquipSlot>();
+        List<InventorySlot> equipSlots = new List<InventorySlot>();
+        [SerializeField] GameObject owner;
 
         private void Awake()
         {
             InventorySlot[] allSlots = GetComponentsInChildren<InventorySlot>();
             foreach (var item in allSlots)
             {
-                if (item is EquipSlot equipSlot)
+                if (item.IsEquipSlot)
                 {
-                    equipSlots.Add(equipSlot);
+                    equipSlots.Add(item);
                 } else
                 {
                     slots.Add(item);
                 }
+                item.Construct(this, owner);
+            }
+            int eqSlotsEnumLength = System.Enum.GetValues(typeof(EquipableSlot)).Length;
+            if (eqSlotsEnumLength != equipSlots.Count)
+            {
+                Debug.LogError($"EquipableSlot enum length ({eqSlotsEnumLength}) is not equals equipSlots.Count ({equipSlots.Count})");
             }
         }
 
         public bool AddItem(Item item, int count)
         {
-            foreach (var slot in slots)
+            if (item.maxStack > 1)
             {
-                if (slot.AddItemToStack(item, count, out int countLeft))
+                foreach (var slot in slots)
                 {
-                    if (countLeft > 0)
+                    if (slot.AddItemToStack(item, count, out int countLeft))
                     {
-                        count = countLeft;
-                    } 
-                    else
-                    {
-                        return true;
+                        if (countLeft > 0)
+                        {
+                            count = countLeft;
+                        } 
+                        else
+                        {
+                            return true;
+                        }
                     }
                 }
             }
+
             foreach (var slot in slots)
             {
                 if (slot.AddItemIfEmpty(item, count))
@@ -51,8 +60,17 @@ namespace Game.Items
             return false;
         }
 
-        public void EquipItem(InventorySlot slot)
+        public void EquipItem(EquipableItem item)
         {
+            int index = (int)item.Slot;
+            var slot = equipSlots[index];
+            if (!slot.AddItemIfEmpty(item, 1))
+            {
+                var oldItem = slot.Item;
+                slot.Item = item;
+                AddItem(oldItem, 1);
+            }
+            slot.UpdateIcon();
         }
     }
 }
