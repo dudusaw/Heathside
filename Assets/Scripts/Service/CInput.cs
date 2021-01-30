@@ -20,7 +20,15 @@ namespace Game
 
         private static bool PointerIsNotOverUI()
         {
-            return !EventSystem.current.IsPointerOverGameObject();
+            EventSystem sys = EventSystem.current;
+            if (sys == null)
+            {
+                return true;
+            }
+            else
+            {
+                return !sys.IsPointerOverGameObject();
+            }
         }
     }
 }

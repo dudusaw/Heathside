@@ -9,7 +9,7 @@ namespace Game.Control
         public float fallingEnterVelocity = -20f;
 
         [SerializeField]
-        public float initialSpeed = 5f;
+        public float speed = 5f;
 
         [SerializeField]
         public float accelerationValue = 5f;

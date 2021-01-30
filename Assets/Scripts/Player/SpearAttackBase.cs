@@ -9,8 +9,10 @@ namespace Game.Control
         [SerializeField] private SpriteRenderer spear;
         [SerializeField] private Collider2D hitArea;
         [SerializeField] private AudioClip audioClip;
-        [SerializeField] [Tooltip("Set to 0 to inherit")] private float activeTime;
-        [SerializeField] private string animationName;
+        [SerializeField] [Tooltip("Set to 0 to inherit")] 
+        private float activeTime;
+        [SerializeField] [Tooltip("name of the corresponding with this state animation to play")] 
+        private string animationName;
 
         private Animator anim;
         private Material swingMat;

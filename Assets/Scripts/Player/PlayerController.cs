@@ -19,8 +19,8 @@ namespace Game.Control
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
             rb.gravityScale = data.defaultGravity;
-            combat = new Combat();
             movementBehavior = new MovementBehavior(rb, anim, data);
+            combat = new Combat(this);
         }
 
         private void FixedUpdate()
@@ -30,7 +30,8 @@ namespace Game.Control
 
         private void Update()
         {
-            movementBehavior.InputUpdate(this);
+            MovementAbility movementAbility = combat.UpdateStates();
+            movementBehavior.InputUpdate(this, movementAbility);
             UpdateAnimations();
 
             if (Input.GetKeyDown(KeyCode.R))
