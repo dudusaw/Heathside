@@ -1,6 +1,6 @@
 ﻿namespace Game.Player
 {
-    internal class MovementBehavior
+    internal class AnimationHandler
     {
     }
 }

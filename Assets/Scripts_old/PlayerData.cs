@@ -24,12 +24,6 @@ namespace Game
         public float speedWhileAttacking = 2f;
 
         [SerializeField]
-        public float healthMaskEasing = 0.05f;
-
-        [SerializeField]
-        public float maskSnapping = 0.0025f;
-
-        [SerializeField]
         public float defaultGravity = 5f;
 
         [SerializeField]
