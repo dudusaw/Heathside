@@ -1,0 +1,521 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AutoFixture.AutoNSubstitute</name>
+    </assembly>
+    <members>
+        <member name="T:AutoFixture.AutoNSubstitute.AutoConfiguredNSubstituteCustomization">
+            <summary>
+            Enables auto-mocking and auto-setup with NSubstitute.
+            Members of a substitute will be automatically setup to retrieve the return values from a fixture.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.AutoConfiguredNSubstituteCustomization.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.AutoConfiguredNSubstituteCustomization"/> class.
+            </summary>
+            <remarks>Uses a new instance of <see cref="T:AutoFixture.AutoNSubstitute.NSubstituteBuilder"/> as the builder.</remarks>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.AutoConfiguredNSubstituteCustomization.#ctor(AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.AutoConfiguredNSubstituteCustomization"/> class.
+            </summary>
+            <param name="relay">The builder to use to create specimens for this customization.</param>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization">
+            <summary>Enables auto-mocking with NSubstitute.</summary>
+            <remarks>
+            NOTICE! You can assign the customization properties to tweak the features you would like to enable. See example.
+            <br />
+            <code>new AutoNSubstituteCustomization { ConfigureMembers = true }</code>
+            </remarks>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization"/> class.
+            <para>
+            NOTICE! You can assign the customization properties to tweak the features you would like to enable. Example:
+            <br />
+            <code>new AutoNSubstituteCustomization { ConfigureMembers = true }</code>
+            </para>
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.#ctor(AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization"/> class.</summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.Builder">
+            <summary>Gets the builder that will be added to <see cref="P:AutoFixture.IFixture.ResidueCollectors"/> when <see cref="M:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.Customize(AutoFixture.IFixture)"/> is invoked.</summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.Relay">
+            <summary>Gets or sets the relay that will be added to <see cref="P:AutoFixture.IFixture.ResidueCollectors"/> when <see cref="M:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.Customize(AutoFixture.IFixture)"/> is invoked.</summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.ConfigureMembers">
+            <summary>
+            Specifies whether members of a substitute will be automatically configured to retrieve the return values from a fixture.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.GenerateDelegates">
+            <summary>
+            If value is <c>true</c>, delegate requests are intercepted and created by NSubstitute.
+            Otherwise, if value is <c>false</c>, delegates are created by the AutoFixture kernel.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization.Customize(AutoFixture.IFixture)">
+            <summary>Customizes an <see cref="T:AutoFixture.IFixture"/> to enable auto-mocking with NSubstitute.</summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CompatShim">
+            <summary>
+                Helper to provide binary compatibility with different NSubstitute versions at run-time.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler">
+            <summary>
+            CallHandler for NSubstitute to provide auto-values from AutoFixture.
+            It resolves return values and sets ref/out parameter values obtained from <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver"/>.
+            Uses cache to resolve value only once per call with specified args.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler.CallSpecificationFactory">
+            <summary>
+            Factory for the <see cref="T:NSubstitute.Core.ICallSpecification"/> instances used as a cache key.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler.ResultCache">
+            <summary>
+            Cache used to store the already resolved call results.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler.ResultResolver">
+            <summary>
+            Resolver used to obtain call result if not present in cache.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler.#ctor(AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver,AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCache,NSubstitute.Core.ICallSpecificationFactory)">
+            <summary>
+            Initializes a new instance of <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler"/> with
+            related specimen context, results cache and specification factory.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.AutoFixtureValuesHandler.Handle(NSubstitute.Core.ICall)">
+            <summary>
+            Try to handle the call - set ref/out params and return value.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultCache">
+            <inheritdoc />
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultCache.AddResult(NSubstitute.Core.ICallSpecification,AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData)">
+            <inheritdoc />
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultCache.TryGetResult(NSubstitute.Core.ICall,AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData@)">
+            <inheritdoc />
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultCacheFactory">
+            <inheritdoc />
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultCacheFactory.CreateCache">
+            <inheritdoc />
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData">
+            <summary>
+            Storage for a single resolved call result.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ReturnValue">
+            <summary>
+            Value that should be returned.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValues">
+            <summary>
+            Ref/Out argument values.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.#ctor(NSubstitute.Core.Maybe{System.Object},System.Collections.Generic.IEnumerable{AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue})">
+            <summary>
+            Initializes instance of the <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData"/>.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue">
+            <summary>
+            Intance represents resolved argument value by index.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue.Index">
+            <summary>
+            Argument index starting from zero.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue.Value">
+            <summary>
+            Argument value.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue.#ctor(System.Int32,System.Object)">
+            <summary>
+            Creates an instance of <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData.ArgumentValue"/>.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolver">
+            <inheritdoc />
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolver.SpecimenContext">
+            <summary>
+            SpecimenContext used to resolve result and argument values.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolver.#ctor(AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a new instance of <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolver"/>.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolver.ResolveResult(NSubstitute.Core.ICall)">
+            <inheritdoc />
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolverFactory">
+            <inheritdoc />
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultResolverFactory.Create(AutoFixture.Kernel.ISpecimenContext)">
+            <inheritdoc />
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCache">
+            <summary>
+            Cache for already resolved call results.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCache.AddResult(NSubstitute.Core.ICallSpecification,AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData)">
+            <summary>
+            Adds result for the passed <paramref name="callSpecification"/>.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCache.TryGetResult(NSubstitute.Core.ICall,AutoFixture.AutoNSubstitute.CustomCallHandler.CallResultData@)">
+            <summary>
+            Returns the latest registered result that matches the passed call.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCacheFactory">
+            <summary>
+             Factory to create an instance of the cache used later to store resolved call results.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCacheFactory.CreateCache">
+            <summary>
+            Create a new instance of cache.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver">
+            <summary>
+            Resolves result for the calls using AutoFixture context.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver.ResolveResult(NSubstitute.Core.ICall)">
+            <summary>
+            Resolve result for the call.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolverFactory">
+            <summary>
+            Factory to create <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver"/>.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolverFactory.Create(AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver"/>.
+            </summary>
+            <param name="specimenContext">The <see cref="T:AutoFixture.Kernel.ISpecimenContext"/> to use to create speciments.</param>
+            <returns>The call result resolver.</returns>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.NSubstituteBuilder">
+            <summary>Provides pre- and post-condition checks for requests for substituted instances.</summary>
+            <seealso cref="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Create(System.Object,AutoFixture.Kernel.ISpecimenContext)"/>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.#ctor(AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.NSubstituteBuilder"/> class with an
+                <see cref="T:AutoFixture.Kernel.ISpecimenBuilder"/> to decorate.</summary>
+            <param name="builder">The builder which must build mock instances.</param>
+            <remarks>
+                <paramref name="builder"/> is subsequently available through the <see cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Builder"/> property.
+            </remarks>
+            <seealso cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Builder"/>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.#ctor(AutoFixture.Kernel.ISpecimenBuilder,AutoFixture.Kernel.IRequestSpecification)">
+            <summary>Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.NSubstituteBuilder"/> class with an
+                <see cref="T:AutoFixture.Kernel.ISpecimenBuilder"/> to decorate.</summary>
+            <param name="builder">The builder which must build mock instances.</param>
+            <param name="substitutionSpecification">A specification that determines whether a substitute should be created for a given request or not.</param>
+            <remarks>
+                <para><paramref name="builder"/> is subsequently available through the <see cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Builder"/> property.</para>
+                <para><paramref name="substitutionSpecification"/> is subsequently available through the <see cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.SubstitutionSpecification"/> property.</para>
+            </remarks>
+            <seealso cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Builder"/>
+            <seealso cref="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.SubstitutionSpecification"/>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Builder">
+            <summary>Gets the decorated builder supplied through the constructor.</summary>
+            <seealso cref="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.#ctor(AutoFixture.Kernel.ISpecimenBuilder)"/>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.NSubstituteBuilder.SubstitutionSpecification">
+            <summary>Gets a specification that determines whether a substitute should be created for a given request.</summary>
+            <remarks>
+                <para>
+                    By default it only returns <see langword="true"/> for interfaces and abstract classes, but a different specification can be supplied by using the
+                    <see cref="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.#ctor(AutoFixture.Kernel.ISpecimenBuilder,AutoFixture.Kernel.IRequestSpecification)"/> overloaded constructor that takes a specification as input. In that case, this
+                    property returns the specification supplied to the constructor.
+                </para>
+            </remarks>
+            <seealso cref="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.#ctor(AutoFixture.Kernel.ISpecimenBuilder,AutoFixture.Kernel.IRequestSpecification)"/>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteBuilder.Create(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>Creates a new specimen based on a request.</summary>
+            <param name="request">The request that describes what to create.</param>
+            <param name="context">A context that can be used to create other specimens.</param>
+            <returns>The requested specimen if possible; otherwise a <see cref="T:AutoFixture.Kernel.NoSpecimen"/> instance.</returns>
+            <remarks>
+                If the request is not a <see cref="T:System.Type"/> or the request does not represent an interface or an abstract class, this method returns a new
+                <see cref="T:AutoFixture.Kernel.NoSpecimen"/>; otherwise, it returns a substitute for the requested type.
+            </remarks>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.NSubstituteMethodQuery">
+            <summary>Selects appropriate methods to create substitutes.</summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteMethodQuery.SelectMethods(System.Type)">
+            <summary>Selects the methods for the supplied type.</summary>
+            <param name="type">The type.</param>
+            <returns>Methods for <paramref name="type"/>.</returns>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand">
+             <summary>
+             Sets up a substitute object's methods so that the return values will be retrieved from a fixture,
+             instead of being created directly by NSubstitute.
+            
+             This will setup any void/non-void virtual methods (including property getters and generics).
+             </summary>
+             <remarks>
+             This will setup any void, non-void virtual methods.
+             This includes:
+              - interface's methods/property getters;
+              - class's abstract/virtual/overridden/non-sealed methods/property getters;
+            
+             Notes:
+             - Calling a method more than once with the same parameters will return the same value by default.
+               To override that behavior pass a custom <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCacheFactory"/> instance.
+             - Methods inherited from <see cref="T:System.Object" /> are not set up due to a limitation in NSubstitute
+                 (http://stackoverflow.com/a/21787891).
+             </remarks>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.SubstitutionContext">
+            <summary>
+            The NSubstitute context.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.CallResultCacheFactory">
+            <summary>
+            Factory used to create <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCache"/> instances.
+            </summary>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.CallResultResolverFactory">
+            <summary>
+            Factory used to create <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolver"/> instances.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.#ctor(NSubstitute.Core.ISubstitutionContext)">
+            <summary>
+            Creates a new <see cref="T:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand"/> instance
+            with default <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCacheFactory"/> and <see cref="T:AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolverFactory"/> instances.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.#ctor(NSubstitute.Core.ISubstitutionContext,AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultCacheFactory,AutoFixture.AutoNSubstitute.CustomCallHandler.ICallResultResolverFactory)">
+            <summary>
+            Creates an new <see cref="T:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand"/> instance.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteRegisterCallHandlerCommand.Execute(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Registers a custom handler for the specified specimen if that is a substitute.
+            Custom handler resolves call result and ref/out arguments using the passed <paramref name="context"/>.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.NSubstituteSealedPropertiesCommand">
+            <summary>
+            If the type of the object being substituted contains any fields and/or non-virtual/sealed
+            settable properties, this initializer will resolve them from a given context.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteSealedPropertiesCommand.Execute(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            If the type of the object being substituted contains any fields and/or non-virtual/sealed
+            settable properties, this initializer will resolve them from a given context.
+            </summary>
+            <param name="specimen">The substitute object.</param>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteSealedPropertiesCommand.NSubstituteSealedPropertySpecification.IsSatisfiedBy(System.Object)">
+            <summary>
+            Satisfied by any fields and non-virtual/sealed properties.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteSealedPropertiesCommand.NSubstituteSealedPropertySpecification.IsDynamicProxyMember(System.Reflection.FieldInfo)">
+            <summary>
+            Checks whether a <see cref="T:System.Reflection.FieldInfo"/> belongs to a dynamic proxy.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.NSubstituteVirtualMethodsCommand">
+             <summary>
+             Sets up a substitute object's methods so that the return values will be retrieved from a fixture,
+             instead of being created directly by NSubstitute.
+            
+             This will setup any non-void virtual methods.
+             </summary>
+             <remarks>
+             This will setup any non-void virtual methods.
+             This includes:
+              - interface's methods/property getters;
+              - class's abstract/virtual/overridden/non-sealed methods/property getters.
+            
+             Notes:
+             - Automatic mocking of generic methods isn't feasible - we'd have to antecipate any type
+                 parameters that this method could be called with.
+             - Void methods are not set up due to a limitation in NSubstitute that When..Do setups can't be overriden
+             - Calling a method more than once with the same parameters will always return the same value
+             - Methods inherited from <see cref="T:System.Object" /> are not set up due to a limitation in NSubstitute
+                 (http://stackoverflow.com/a/21787891).
+             </remarks>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.NSubstituteVirtualMethodsCommand.Execute(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Sets up a substitute object's methods so that the return values will be retrieved from a fixture,
+            instead of being created directly by NSubstitute.
+            </summary>
+            <param name="specimen">The substitute to setup.</param>
+            <param name="context">The context of the specimen.</param>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.SubstituteAttribute">
+            <summary>
+            An attribute that can be applied to code elements to indicate they should be auto-generated by creating a
+            substitute.
+            </summary>
+            <remarks>
+            When this attribute is applied to a parameter in a data-driven test, such as xUnit's <c>[Theory]</c>,
+            the test must also have a test conventions attribute that enables automatic generation of the
+            <see cref="T:AutoFixture.Fixture"/> with the <see cref="T:AutoFixture.AutoNSubstitute.AutoNSubstituteCustomization"/>. For xUnit, this is done by deriving
+            the test conventions attribute from the <c>AutoDataAttribute</c> supplied by the AutoFixture for xUnit.net.
+            </remarks>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.SubstituteAttributeRelay">
+            <summary>
+            Relays a request for a code element marked with the <see cref="T:AutoFixture.AutoNSubstitute.SubstituteAttribute"/> to a
+            <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/> of element's type.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteAttributeRelay.Create(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a relayed request based on the <see cref="T:AutoFixture.AutoNSubstitute.SubstituteAttribute"/> applied to a code element and
+            resolves it from the given <paramref name="context"/>.
+            </summary>
+            <returns>
+            A specimen resolved from the <paramref name="context"/> based on a relayed request.
+            If the <paramref name="request"/> code element does not have <see cref="T:AutoFixture.AutoNSubstitute.SubstituteAttribute"/> applied,
+            returns <see cref="T:AutoFixture.Kernel.NoSpecimen"/>.
+            </returns>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.SubstituteRelay">
+            <summary>
+            Relays a request for an interface or an abstract class to a request for a substitute of that type.
+            </summary>
+            <remarks>
+            This class serves as a residue collector, catching unanswered requests for an instance of an abstract type and
+            converting them to requests for a substitute of that type, dynamically generated by NSubstitute.
+            </remarks>
+            <seealso cref="P:AutoFixture.IFixture.ResidueCollectors"/>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.SubstituteRelay.Specification">
+            <summary>
+            Specification used to check whether a type request should be redirected to a substitute request.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRelay.#ctor(AutoFixture.Kernel.IRequestSpecification)">
+            <summary>
+            Creates a new instance of <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRelay"/>.
+            </summary>
+            <param name="specification">Specification to test whether request should be relayed.</param>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRelay.#ctor">
+            <summary>
+            Creates a new instance of <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRelay"/>.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRelay.Create(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a substitute when request is an abstract type.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            An attempt to resolve a substitute from the <paramref name="context"/> returned an object that was not
+            created by NSubstitute.
+            </exception>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.SubstituteRequest">
+            <summary>
+            Defines a request for a substitute.
+            </summary>
+            <remarks>
+            Unlike some other test isolation frameworks which define types that represent the dynamically generated proxies,
+            such as Mock{T} in Moq and Fake{T} in FakeItEasy, NSubstitute does not. This class fills this gap and allows
+            AutoFixture to distinguish an explicit request for a substitute from a request for a regular type. This is
+            necessary to support creation of substitutes for concrete types.
+            </remarks>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRequest.#ctor(System.Type)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/> class.
+            </summary>
+            <param name="targetType">
+            A <see cref="T:System.Type"/> for which a substitute is being requested.
+            </param>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.SubstituteRequest.TargetType">
+            <summary>
+            Gets the type for which a substitute is requested.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRequest.ToString">
+            <summary>
+            Add user friendly request message.
+            </summary>
+        </member>
+        <member name="T:AutoFixture.AutoNSubstitute.SubstituteRequestHandler">
+            <summary>
+            Creates a substitute in response to the <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/>.
+            </summary>
+            <remarks>
+            This class serves as a fixture customization, responding to explicit substitute requests in the form of the
+            <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/> instances. The actual construction of the substitute is delegated to a
+            substitute factory, responsible for invoking an appropriate constructor for the target type with
+            automatically generated arguments.
+            </remarks>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRequestHandler.#ctor(AutoFixture.Kernel.ISpecimenBuilder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequestHandler"/> class with the specified
+            <paramref name="substituteFactory"/>.
+            </summary>
+            <param name="substituteFactory">
+            An <see cref="T:AutoFixture.Kernel.ISpecimenBuilder"/> responsible for creating a substitute instance from a requested
+            <see cref="T:System.Type"/>.
+            </param>
+        </member>
+        <member name="P:AutoFixture.AutoNSubstitute.SubstituteRequestHandler.SubstituteFactory">
+            <summary>
+            Returns an <see cref="T:AutoFixture.Kernel.ISpecimenBuilder"/> responsible for creating a substitute instance based on a target
+            <see cref="T:System.Type"/> type.
+            </summary>
+        </member>
+        <member name="M:AutoFixture.AutoNSubstitute.SubstituteRequestHandler.Create(System.Object,AutoFixture.Kernel.ISpecimenContext)">
+            <summary>
+            Creates a substitute when <paramref name="request"/> is an explicit <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/>.
+            </summary>
+            <returns>
+            A substitute created by the <see cref="P:AutoFixture.AutoNSubstitute.SubstituteRequestHandler.SubstituteFactory"/> when <paramref name="request"/> is a
+            <see cref="T:AutoFixture.AutoNSubstitute.SubstituteRequest"/> or <see cref="T:AutoFixture.Kernel.NoSpecimen"/> for all other requests.
+            </returns>
+        </member>
+    </members>
+</doc>
