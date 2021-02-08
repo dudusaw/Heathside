@@ -1,6 +1,11 @@
-﻿namespace Game.Player
+﻿namespace Game.Control
 {
-    internal class Combat
+    public class Combat
     {
+
+        public bool IsActiveAny()
+        {
+            return false;
+        }
     }
 }

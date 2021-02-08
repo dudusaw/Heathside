@@ -2,16 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Player
+namespace Game.Control
 {
     public class PlayerController : MonoBehaviour
     {
         [SerializeField]
         private PlayerData data;
 
-        private AnimationHandler anim;
+        private Rigidbody2D rb;
+        private Animator anim;
         private Combat combat;
-
         private MovementBehavior movementBehavior;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody2D>();
+            anim = GetComponent<Animator>();
+            movementBehavior = new MovementBehavior(rb, anim, data);
+        }
+
+        private void FixedUpdate()
+        {
+            movementBehavior.MovementFixedUpdate();
+        }
+
+        private void Update()
+        {
+            movementBehavior.InputUpdate();
+            movementBehavior.CheckJump(this);
+            UpdateAnimations();
+        }
+
+        private void UpdateAnimations()
+        {
+            bool onGround = movementBehavior.OnGround;
+            if (!combat.IsActiveAny())
+            {
+                movementBehavior.ScaleFlipFromDirection(transform);
+
+                bool isRunning = movementBehavior.Direction != MovingDirection.idle;
+                anim.SetBool(PlayerAnimationInts.isRunning, isRunning);
+
+                FallingCheck(onGround);
+            }
+
+            anim.SetBool(PlayerAnimationInts.onGround, onGround);
+        }
+
+        private void FallingCheck(bool onGround)
+        {
+            if (!onGround && rb.velocity.y < data.fallingEnterVelocity
+                                && anim.GetCurrentAnimatorStateInfo(0).shortNameHash != PlayerAnimationInts.Player_fall)
+            {
+                anim.Play(PlayerAnimationInts.Player_fall);
+            }
+        }
     }
 }
