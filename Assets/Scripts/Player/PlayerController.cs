@@ -18,6 +18,8 @@ namespace Game.Control
         {
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+            rb.gravityScale = data.defaultGravity;
+            combat = new Combat();
             movementBehavior = new MovementBehavior(rb, anim, data);
         }
 
@@ -28,14 +30,19 @@ namespace Game.Control
 
         private void Update()
         {
-            movementBehavior.InputUpdate();
-            movementBehavior.CheckJump(this);
+            movementBehavior.InputUpdate(this);
             UpdateAnimations();
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                transform.position = Vector3.zero;
+            }
         }
 
         private void UpdateAnimations()
         {
             bool onGround = movementBehavior.OnGround;
+            anim.SetBool(PlayerAnimationInts.onGround, onGround);
             if (!combat.IsActiveAny())
             {
                 movementBehavior.ScaleFlipFromDirection(transform);
@@ -45,8 +52,6 @@ namespace Game.Control
 
                 FallingCheck(onGround);
             }
-
-            anim.SetBool(PlayerAnimationInts.onGround, onGround);
         }
 
         private void FallingCheck(bool onGround)

@@ -38,6 +38,7 @@ namespace Game.Control
             this.anim = anim;
             this.rb = rb;
             this.data = data;
+            speed = data.initialSpeed;
             Collider2D[] col2ds = new Collider2D[1];
             int colCount = rb.GetAttachedColliders(col2ds);
             if (colCount != 1)
@@ -59,7 +60,8 @@ namespace Game.Control
             }
         }
 
-        public void InputUpdate()
+        /// <param name="obj">MonoBehaviour to start a coroutine from</param>
+        public void InputUpdate(MonoBehaviour obj)
         {
             xInputAxis = Input.GetAxis("Horizontal");
             if (Mathf.Approximately(xInputAxis, 0))
@@ -70,6 +72,7 @@ namespace Game.Control
             {
                 movingDirection = (MovingDirection)Mathf.Sign(xInputAxis);
             }
+            CheckJump(obj);
         }
 
         private void TestGrounded()
@@ -83,22 +86,23 @@ namespace Game.Control
 
         private void UpdateMoving()
         {
-            rb.AddForce(new Vector2(xInputAxis * speed, 0));
+            rb.AddForce(new Vector2(xInputAxis * speed * data.accelerationValue, 0));
             Vector2 vel = rb.velocity;
-            Mathf.Clamp(vel.x, -speed, speed);
+            vel.x = Mathf.Clamp(vel.x, -speed, speed);
             rb.velocity = vel;
+            Debug.Log(vel.x);
+            //rb.velocity = new Vector2(xInputAxis * speed, rb.velocity.y);
         }
 
-        /// <param name="obj">MonoBehaviour to start a coroutine from</param>
-        public void CheckJump(MonoBehaviour obj)
+        private void CheckJump(MonoBehaviour obj)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (!jumpCoroStarted && Input.GetKeyDown(KeyCode.Space))
             {
                 if (OnGround)
                 {
                     PerformJump();
                 }
-                else if (!jumpCoroStarted)
+                else
                 {
                     obj.StartCoroutine(TimeDelayedJump(data.preJumpTime));
                 }

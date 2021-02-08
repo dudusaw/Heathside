@@ -1,5 +1,4 @@
 ﻿using Cinemachine;
-using Game.Animation;
 using Game.Base;
 using UnityEngine;
 
@@ -123,7 +122,7 @@ namespace Game.Control
 
         private void DashStop()
         {
-            anim.Play(AnimatorArgs.Player_dash_end);
+            anim.Play(PlayerAnimationInts.Player_dash_end);
             rb.gravityScale = initialGrav;
             active = false;
         }
@@ -158,7 +157,7 @@ namespace Game.Control
         {
             if (active) return;
 
-            anim.Play(AnimatorArgs.Player_dash_start);
+            anim.Play(PlayerAnimationInts.Player_dash_start);
             Transform root = transform.root.transform;
             Vector3 scale = root.localScale;
             scale.x = (int)direction * Mathf.Abs(scale.x);

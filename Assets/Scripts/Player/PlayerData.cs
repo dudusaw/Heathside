@@ -5,20 +5,14 @@ namespace Game.Control
     [CreateAssetMenu(menuName = "Game/PlayerData")]
     public class PlayerData : ScriptableObject
     {
-        [SerializeField]
-        public PhysicsMaterial2D noFriction;
-
-        [SerializeField]
-        public PhysicsMaterial2D fullFriction;
-
-        [SerializeField]
-        public GameObject startAttack;
-
         [SerializeField, Tooltip("Should be negative")]
         public float fallingEnterVelocity = -20f;
 
         [SerializeField]
-        public float speed = 5f;
+        public float initialSpeed = 5f;
+
+        [SerializeField]
+        public float accelerationValue = 5f;
 
         [SerializeField]
         public float speedWhileAttacking = 2f;
