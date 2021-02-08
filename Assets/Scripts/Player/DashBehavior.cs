@@ -34,7 +34,6 @@ namespace Game.Control
             col = this.GetComponentOnRoot<Collider2D>();
             impulseSrc = GetComponent<CinemachineImpulseSource>();
             Utils.CheckComponents(rb, anim, col, data, impulseSrc);
-            initialGrav = rb.gravityScale;
             impulseSrc.m_ImpulseDefinition.m_AmplitudeGain = data.impulseAmp;
             impulseSrc.m_ImpulseDefinition.m_FrequencyGain = data.impulseFreq;
         }
@@ -70,7 +69,6 @@ namespace Game.Control
                 float u = 1f - (speedTime / data.dashTime);
                 float velX = Mathf.Lerp(data.minDashSpeed, data.maxDashSpeed, u) * (int)direction;
                 float velY = 0;
-                rb.sharedMaterial = data.noFriction;
 
                 // Trying to resolve collision by pushing upwards when we hit the ground on the way
                 if (u >= data.castPercent)
@@ -123,7 +121,6 @@ namespace Game.Control
         private void DashStop()
         {
             anim.Play(PlayerAnimationInts.Player_dash_end);
-            rb.gravityScale = initialGrav;
             active = false;
         }
 
@@ -163,7 +160,6 @@ namespace Game.Control
             scale.x = (int)direction * Mathf.Abs(scale.x);
             root.localScale = scale;
             speedTime = 0;
-            rb.gravityScale = 0;
             active = true;
             impulseSrc.GenerateImpulse(Vector2.left);
             DashExplosionEffect exp = Instantiate(data.explosion, transform.position, Quaternion.identity);

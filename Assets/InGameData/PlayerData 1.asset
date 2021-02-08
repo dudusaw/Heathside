@@ -12,11 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28708dbd75bf1254aa309190ff32c1a5, type: 3}
   m_Name: PlayerData 1
   m_EditorClassIdentifier: 
-  noFriction: {fileID: 0}
-  fullFriction: {fileID: 0}
-  startAttack: {fileID: 0}
   fallingEnterVelocity: -20
-  speed: 5
+  initialSpeed: 5
+  accelerationValue: 20
   speedWhileAttacking: 2
   defaultGravity: 5
   jumpForce: 16

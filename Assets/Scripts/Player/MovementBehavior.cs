@@ -14,9 +14,9 @@ namespace Game.Control
     {
         private Animator anim;
         private bool jumpCoroStarted;
-        private float speed;
         private float xInputAxis;
         private PlayerData data;
+        private MovementAbility movementAbility;
 
         private MovingDirection lastDirection = MovingDirection.right;
         private MovingDirection movingDirection = MovingDirection.idle;
@@ -25,12 +25,6 @@ namespace Game.Control
         private Collider2D col;
 
         public bool OnGround { get; private set; }
-        public float Speed 
-        { 
-            get => speed; 
-            set => speed = value; 
-        }
-
         public MovingDirection Direction { get => movingDirection; }
 
         public MovementBehavior(Rigidbody2D rb, Animator anim, PlayerData data)
@@ -38,7 +32,6 @@ namespace Game.Control
             this.anim = anim;
             this.rb = rb;
             this.data = data;
-            speed = data.initialSpeed;
             Collider2D[] col2ds = new Collider2D[1];
             int colCount = rb.GetAttachedColliders(col2ds);
             if (colCount != 1)
@@ -53,16 +46,22 @@ namespace Game.Control
 
         public void MovementFixedUpdate()
         {
+            float speed = data.speed;
+            if (movementAbility.InfluenceSpeed)
+            {
+                speed = movementAbility.DesiredSpeed;
+            }
             if (speed > 0)
             {
                 TestGrounded();
-                UpdateMoving();
+                UpdateMoving(speed);
             }
         }
 
         /// <param name="obj">MonoBehaviour to start a coroutine from</param>
-        public void InputUpdate(MonoBehaviour obj)
+        public void InputUpdate(MonoBehaviour obj, MovementAbility movementAbility)
         {
+            this.movementAbility = movementAbility;
             xInputAxis = Input.GetAxis("Horizontal");
             if (Mathf.Approximately(xInputAxis, 0))
             {
@@ -84,13 +83,12 @@ namespace Game.Control
             OnGround = overlaps > 0;
         }
 
-        private void UpdateMoving()
+        private void UpdateMoving(float speed)
         {
             rb.AddForce(new Vector2(xInputAxis * speed * data.accelerationValue, 0));
             Vector2 vel = rb.velocity;
             vel.x = Mathf.Clamp(vel.x, -speed, speed);
             rb.velocity = vel;
-            Debug.Log(vel.x);
             //rb.velocity = new Vector2(xInputAxis * speed, rb.velocity.y);
         }
 

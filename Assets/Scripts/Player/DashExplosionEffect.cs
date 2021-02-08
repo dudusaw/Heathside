@@ -9,13 +9,12 @@ namespace Game.Control
         [SerializeField] private float initialScale = 0.1f;
         [SerializeField] private float speed = 5f;
 
-        private SpriteRenderer mat;
+        private SpriteRenderer rend;
         private static readonly int timeProperty = Shader.PropertyToID("_FadeTime");
 
-        // Start is called before the first frame update
-        private void Start()
+        private void Awake()
         {
-            mat = GetComponent<SpriteRenderer>();
+            rend = GetComponent<SpriteRenderer>();
         }
 
         public void StartExplosion()
@@ -33,7 +32,7 @@ namespace Game.Control
                 float curSc = transform.localScale.x;
                 float scale = Mathf.Lerp(curSc, maxScale, speed * Time.deltaTime);
                 float value = scale / maxScale;
-                mat.material.SetFloat(timeProperty, value);
+                rend.material.SetFloat(timeProperty, value);
                 Utils.SetScale(transform, scale);
             }
             Destroy(gameObject);

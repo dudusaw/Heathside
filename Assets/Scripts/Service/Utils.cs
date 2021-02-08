@@ -21,13 +21,14 @@ namespace Game
         /// Logs an error if one of provided components is null.
         /// </summary>
         /// <returns>true if all of the objects are not null</returns>
-        public static bool CheckComponents(params UnityEngine.Object[] objects)
+        public static bool CheckComponents(params Object[] objects)
         {
-            foreach (var item in objects)
+            for (int i = 0; i < objects.Length; i++)
             {
+                Object item = objects[i];
                 if (item == null)
                 {
-                    Debug.LogError($"Missing component {item.name}");
+                    Debug.LogError($"Missing component {i}");
                     return false;
                 }
             }

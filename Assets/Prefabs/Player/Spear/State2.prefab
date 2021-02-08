@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6724050966629878352}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a94cbf16db317c46954f468e185ebcd, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e2a6d73fe1d1094c9424a3dff626100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   swing: {fileID: 540525081298425673}
   spear: {fileID: 540525081137503184}
   hitArea: {fileID: 540525082814914660}
   audioClip: {fileID: 8300000, guid: 4c0be622d2d20c14690f47e68cd8b531, type: 3}
-  activeTime: 0.35
+  activeTime: 0
   animationName: Player_empty_attack_2
 --- !u!1001 &2151369433580233918
 PrefabInstance:
