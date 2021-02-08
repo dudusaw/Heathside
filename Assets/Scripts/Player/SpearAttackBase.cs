@@ -1,5 +1,4 @@
-﻿using Game.Animation;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Game.Control
@@ -81,7 +80,7 @@ namespace Game.Control
         {
             if (anim.GetCurrentAnimatorStateInfo(0).shortNameHash == animHash)
             {
-                anim.Play(AnimatorArgs.Player_idle);
+                anim.Play(PlayerAnimationInts.Player_idle);
             }
             SetEnabledState(false);
         }

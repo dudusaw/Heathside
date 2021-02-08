@@ -1,17 +1,9 @@
-using Game.Animation;
-using Game.Base;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Game.Control
 {
-    public enum MovingDirection
-    {
-        idle = 0,
-        left = -1,
-        right = 1
-    }
-
     public class PlayerController : MonoBehaviour
     {
         [SerializeField]
@@ -19,158 +11,56 @@ namespace Game.Control
 
         private Rigidbody2D rb;
         private Animator anim;
-        private BaseStats stats;
-
+        private Combat combat;
         private MovementBehavior movementBehavior;
-        private JumpBehavior jumpBehavior;
-
-        private List<IStateBehavior> allBehaviors;
 
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            stats = GetComponent<BaseStats>();
             anim = GetComponent<Animator>();
-
-            ConstructBehaviors();
-
             rb.gravityScale = data.defaultGravity;
+            combat = new Combat();
+            movementBehavior = new MovementBehavior(rb, anim, data);
         }
 
-        private void ConstructBehaviors()
+        private void FixedUpdate()
         {
-            IStateBehavior attack = GetComponentInChildren<SpearAttackBehavior>();
-            if (attack == null)
-            {
-                attack = new BehaviorBase();
-            }
-
-            MovementBehavior move = GetComponent<MovementBehavior>();
-            movementBehavior = move;
-
-            JumpBehavior jump = GetComponent<JumpBehavior>();
-            jump.Construct(() => move.OnGround);
-            jumpBehavior = jump;
-
-            DashBehavior dash = GetComponentInChildren<DashBehavior>();
-
-            allBehaviors = new List<IStateBehavior>();
-            allBehaviors.Add(attack);
-            allBehaviors.Add(dash);
-            Utils.CheckComponents(dash, move, jump);
+            movementBehavior.MovementFixedUpdate();
         }
 
         private void Update()
         {
-            UpdateSkills();
-            KeysForTesting();
+            movementBehavior.InputUpdate(this);
             UpdateAnimations();
-        }
 
-        private void UpdateSkills()
-        {
-            bool influenceSpeed = false;
-            float desiredSpeed = 0;
-            foreach (var item in allBehaviors)
-            {
-                if (item.IsActive)
-                {
-                    if (item.Movement.InfluenceSpeed)
-                    {
-                        influenceSpeed = true;
-                        desiredSpeed = item.Movement.DesiredSpeed;
-                    }
-                    if (!item.Interruptible)
-                    {
-                        UpdateMoving(influenceSpeed, desiredSpeed);
-                        item.StateUpdate();
-                        return;
-                    }
-                }
-            }
-
-            UpdateMoving(influenceSpeed, desiredSpeed);
-
-            foreach (var item in allBehaviors)
-            {
-                bool wasInactive = item.IsActive == false;
-                item.StateUpdate();
-                if (wasInactive && item.IsActive)
-                {
-                    foreach (var item2 in allBehaviors)
-                    {
-                        if (item2 != item && item2.IsActive && item2.Interruptible)
-                        {
-                            item2.Interrupt();
-                        }
-                    }
-                }
-            }
-        }
-
-        private void UpdateMoving(bool influenceSpeed, float desiredSpeed)
-        {
-            bool canMove = !influenceSpeed || desiredSpeed > 0;
-            movementBehavior.CanMove = canMove;
-            if (influenceSpeed)
-            {
-                movementBehavior.UpdateInputX(desiredSpeed);
-            }
-            else
-            {
-                movementBehavior.UpdateInputX();
-            }
-
-            if (canMove)
-            {
-                jumpBehavior.CheckJump();
-            }
-        }
-
-        private void KeysForTesting()
-        {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 transform.position = Vector3.zero;
             }
         }
 
-        private bool IsActiveAny()
-        {
-            foreach (var item in allBehaviors)
-            {
-                if (item.IsActive)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         private void UpdateAnimations()
         {
             bool onGround = movementBehavior.OnGround;
-            if (!IsActiveAny())
+            anim.SetBool(PlayerAnimationInts.onGround, onGround);
+            if (!combat.IsActiveAny())
             {
-                movementBehavior.ScaleFlipFromDirection();
+                movementBehavior.ScaleFlipFromDirection(transform);
 
-                if (movementBehavior.Direction == MovingDirection.idle)
-                {
-                    anim.SetBool(AnimatorArgs.isRunning, false);
-                }
-                else
-                {
-                    anim.SetBool(AnimatorArgs.isRunning, true);
-                }
+                bool isRunning = movementBehavior.Direction != MovingDirection.idle;
+                anim.SetBool(PlayerAnimationInts.isRunning, isRunning);
 
-                if (!onGround && rb.velocity.y < data.fallingEnterVelocity
-                    && anim.GetCurrentAnimatorStateInfo(0).shortNameHash != AnimatorArgs.Player_fall)
-                {
-                    anim.Play(AnimatorArgs.Player_fall);
-                }
+                FallingCheck(onGround);
             }
+        }
 
-            anim.SetBool(AnimatorArgs.onGround, onGround);
+        private void FallingCheck(bool onGround)
+        {
+            if (!onGround && rb.velocity.y < data.fallingEnterVelocity
+                                && anim.GetCurrentAnimatorStateInfo(0).shortNameHash != PlayerAnimationInts.Player_fall)
+            {
+                anim.Play(PlayerAnimationInts.Player_fall);
+            }
         }
     }
 }

@@ -1,92 +1,117 @@
-using Game.Base;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Game.Control
 {
-    public class MovementBehavior : MonoBehaviour
+    public enum MovingDirection
     {
-        [SerializeField] private PlayerData data;
+        idle = 0,
+        left = -1,
+        right = 1
+    }
 
-        private float inputX;
-
-        private Rigidbody2D rb;
-        private Collider2D col;
+    public class MovementBehavior
+    {
+        private Animator anim;
+        private bool jumpCoroStarted;
+        private float speed;
+        private float xInputAxis;
+        private PlayerData data;
 
         private MovingDirection lastDirection = MovingDirection.right;
         private MovingDirection movingDirection = MovingDirection.idle;
 
-        public bool CanMove { get; set; }
+        private Rigidbody2D rb;
+        private Collider2D col;
+
         public bool OnGround { get; private set; }
+        public float Speed 
+        { 
+            get => speed; 
+            set => speed = value; 
+        }
+
         public MovingDirection Direction { get => movingDirection; }
 
-        private void Awake()
+        public MovementBehavior(Rigidbody2D rb, Animator anim, PlayerData data)
         {
-            rb = this.GetComponentOnRoot<Rigidbody2D>();
-            col = this.GetComponentOnRoot<Collider2D>();
+            this.anim = anim;
+            this.rb = rb;
+            this.data = data;
+            speed = data.initialSpeed;
+            Collider2D[] col2ds = new Collider2D[1];
+            int colCount = rb.GetAttachedColliders(col2ds);
+            if (colCount != 1)
+            {
+                Debug.LogError($"wrong collider count {colCount}, should be 1");
+            } 
+            else
+            {
+                col = col2ds[0];
+            }
         }
 
-        private void FixedUpdate()
+        public void MovementFixedUpdate()
         {
-            if (CanMove)
+            if (speed > 0)
             {
                 TestGrounded();
-                UpdateMoving(inputX);
-            }
-            else
-            {
-                UpdateMoving(0);
+                UpdateMoving();
             }
         }
 
-        private void TestGrounded()
+        /// <param name="obj">MonoBehaviour to start a coroutine from</param>
+        public void InputUpdate(MonoBehaviour obj)
         {
-            RaycastHit2D[] hits = new RaycastHit2D[2];
-            Vector2 boxSize = new Vector2(col.bounds.size.x - 0.01f, 0.1f);
-            int overlaps = Physics2D.BoxCastNonAlloc(col.bounds.center, boxSize,
-                0, Vector2.down, hits, col.bounds.extents.y, GameLayers.ground);
-            OnGround = overlaps > 0;
-        }
-
-        private void UpdateMoving(float x)
-        {
-            rb.velocity = new Vector2(x, rb.velocity.y);
-            CheckFriction();
-        }
-
-        private void CheckFriction()
-        {
-            if (movingDirection != 0 || !OnGround)
-            {
-                rb.sharedMaterial = data.noFriction;
-            }
-            else
-            {
-                rb.sharedMaterial = data.fullFriction;
-            }
-        }
-
-        public void UpdateInputX()
-        {
-            UpdateInputX(data.speed);
-        }
-
-        public void UpdateInputX(float desiredSpeed)
-        {
-            float axis = Input.GetAxis("Horizontal");
-            inputX = axis * desiredSpeed;
-            if (axis == 0)
+            xInputAxis = Input.GetAxis("Horizontal");
+            if (Mathf.Approximately(xInputAxis, 0))
             {
                 movingDirection = MovingDirection.idle;
             }
             else
             {
-                movingDirection = (MovingDirection)Mathf.Sign(axis);
+                movingDirection = (MovingDirection)Mathf.Sign(xInputAxis);
+            }
+            CheckJump(obj);
+        }
+
+        private void TestGrounded()
+        {
+            RaycastHit2D[] hits = new RaycastHit2D[1];
+            Vector2 boxSize = new Vector2(col.bounds.size.x - 0.01f, 0.1f);
+            int overlaps = Physics2D.BoxCastNonAlloc(col.bounds.center, boxSize,
+                0, Vector2.down, hits, col.bounds.extents.y, GameLayers.Ground);
+            OnGround = overlaps > 0;
+        }
+
+        private void UpdateMoving()
+        {
+            rb.AddForce(new Vector2(xInputAxis * speed * data.accelerationValue, 0));
+            Vector2 vel = rb.velocity;
+            vel.x = Mathf.Clamp(vel.x, -speed, speed);
+            rb.velocity = vel;
+            Debug.Log(vel.x);
+            //rb.velocity = new Vector2(xInputAxis * speed, rb.velocity.y);
+        }
+
+        private void CheckJump(MonoBehaviour obj)
+        {
+            if (!jumpCoroStarted && Input.GetKeyDown(KeyCode.Space))
+            {
+                if (OnGround)
+                {
+                    PerformJump();
+                }
+                else
+                {
+                    obj.StartCoroutine(TimeDelayedJump(data.preJumpTime));
+                }
             }
         }
 
-        public void ScaleFlipFromDirection()
+        public void ScaleFlipFromDirection(Transform t)
         {
-            Vector3 scale = transform.localScale;
+            Vector3 scale = t.localScale;
             switch (movingDirection)
             {
                 case MovingDirection.idle:
@@ -95,15 +120,38 @@ namespace Game.Control
 
                 case MovingDirection.left:
                     scale.x = -Mathf.Abs(scale.x);
-                    lastDirection = MovingDirection.left;
+                    lastDirection = movingDirection;
                     break;
 
                 case MovingDirection.right:
                     scale.x = Mathf.Abs(scale.x);
-                    lastDirection = MovingDirection.right;
+                    lastDirection = movingDirection;
                     break;
             }
-            transform.localScale = scale;
+            t.localScale = scale;
+        }
+
+        private void PerformJump()
+        {
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+            rb.AddForce(new Vector2(0, data.jumpForce), ForceMode2D.Impulse);
+            anim.Play(PlayerAnimationInts.Player_jump);
+        }
+
+        private IEnumerator TimeDelayedJump(float timeToWait)
+        {
+            jumpCoroStarted = true;
+            while (timeToWait > 0)
+            {
+                yield return null;
+                timeToWait -= Time.deltaTime;
+                if (OnGround)
+                {
+                    PerformJump();
+                    break;
+                }
+            }
+            jumpCoroStarted = false;
         }
     }
 }
