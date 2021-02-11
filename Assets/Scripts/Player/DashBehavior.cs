@@ -1,8 +1,8 @@
 ﻿using Cinemachine;
-using Game.Base;
+using Heathside.Base;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     /// <summary>
     /// Must be executed after controller movement
@@ -16,16 +16,17 @@ namespace Game.Control
 
         private MovingDirection direction = MovingDirection.idle;
 
+        private float gravity;
         private bool aKey;
         private bool dKey;
         private bool active;
 
-        private float initialGrav;
         private float timeSinceLastAKey;
         private float timeSinceLastDKey;
         private float speedTime;
 
-        [SerializeField] private DashData data;
+        [SerializeField] private DashData dashData;
+        [SerializeField] private PlayerData playerData;
 
         private void Awake()
         {
@@ -33,25 +34,33 @@ namespace Game.Control
             anim = this.GetComponentOnRoot<Animator>();
             col = this.GetComponentOnRoot<Collider2D>();
             impulseSrc = GetComponent<CinemachineImpulseSource>();
-            Utils.CheckComponents(rb, anim, col, data, impulseSrc);
-            impulseSrc.m_ImpulseDefinition.m_AmplitudeGain = data.impulseAmp;
-            impulseSrc.m_ImpulseDefinition.m_FrequencyGain = data.impulseFreq;
+            Utils.CheckComponents(rb, anim, col, dashData, impulseSrc);
+            impulseSrc.m_ImpulseDefinition.m_AmplitudeGain = dashData.impulseAmp;
+            impulseSrc.m_ImpulseDefinition.m_FrequencyGain = dashData.impulseFreq;
         }
 
-        public override void StateUpdate()
+        public override void StateUpdate(System.Action interruptionCallback)
         {
             if (active) return;
+
+            bool activated = false;
 
             if (Input.GetKeyDown(KeyCode.A))
             {
                 direction = MovingDirection.left;
-                KeyDown(ref aKey, ref timeSinceLastAKey);
+                activated |= KeyDown(ref aKey, ref timeSinceLastAKey);
             }
 
             if (Input.GetKeyDown(KeyCode.D))
             {
                 direction = MovingDirection.right;
-                KeyDown(ref dKey, ref timeSinceLastDKey);
+                activated |= KeyDown(ref dKey, ref timeSinceLastDKey);
+            }
+
+            if (activated)
+            {
+                interruptionCallback();
+                StartDash();
             }
         }
 
@@ -66,12 +75,12 @@ namespace Game.Control
         {
             if (active)
             {
-                float u = 1f - (speedTime / data.dashTime);
-                float velX = Mathf.Lerp(data.minDashSpeed, data.maxDashSpeed, u) * (int)direction;
+                float u = 1f - (speedTime / dashData.dashTime);
+                float velX = Mathf.Lerp(dashData.minDashSpeed, dashData.maxDashSpeed, u) * (int)direction;
                 float velY = 0;
 
                 // Trying to resolve collision by pushing upwards when we hit the ground on the way
-                if (u >= data.castPercent)
+                if (u >= dashData.castPercent)
                 {
                     float vResolvingDistance = col.bounds.extents.y;
                     Vector2 point = new Vector2();
@@ -79,19 +88,19 @@ namespace Game.Control
                     point.y = col.bounds.min.y + vResolvingDistance / 2;
                     Collider2D[] collider2Ds = new Collider2D[2];
                     Vector2 size = new Vector2();
-                    size.x = data.castDistance;
-                    size.y = vResolvingDistance - data.colliderEdge;
+                    size.x = dashData.castDistance;
+                    size.y = vResolvingDistance - dashData.colliderEdge;
                     int overlapCount = Physics2D.OverlapBoxNonAlloc(point, size,
                         0, collider2Ds, GameLayers.Ground);
                     if (overlapCount > 0)
                     {
                         point.y = col.bounds.center.y + vResolvingDistance / 2;
-                        size.y = col.bounds.size.y - vResolvingDistance - data.colliderEdge;
+                        size.y = col.bounds.size.y - vResolvingDistance - dashData.colliderEdge;
                         overlapCount = Physics2D.OverlapBoxNonAlloc(point, size,
                             0, collider2Ds, GameLayers.Ground);
                         if (overlapCount == 0)
                         {
-                            velY = data.yResolvingVelocity;
+                            velY = dashData.yResolvingVelocity;
                         }
                     }
                 }
@@ -101,17 +110,17 @@ namespace Game.Control
 
         private void Update()
         {
-            UpdateTimeIfCasting();
+            UpdateTimeIfActive();
             UpdateKeyTime(ref aKey, ref timeSinceLastAKey);
             UpdateKeyTime(ref dKey, ref timeSinceLastDKey);
         }
 
-        private void UpdateTimeIfCasting()
+        private void UpdateTimeIfActive()
         {
             if (active)
             {
                 speedTime += Time.deltaTime;
-                if (speedTime > data.dashTime)
+                if (speedTime > dashData.dashTime)
                 {
                     DashStop();
                 }
@@ -122,6 +131,8 @@ namespace Game.Control
         {
             anim.Play(PlayerAnimationInts.Player_dash_end);
             active = false;
+            playerData.attributes.RestoreMovement();
+            rb.gravityScale = gravity;
         }
 
         private void UpdateKeyTime(ref bool key, ref float time)
@@ -129,24 +140,25 @@ namespace Game.Control
             if (key)
             {
                 time += Time.deltaTime;
-                if (time > data.maxTimeBetweenPresses)
+                if (time > dashData.maxTimeBetweenPresses)
                 {
                     key = false;
                 }
             }
         }
 
-        private void KeyDown(ref bool key, ref float time)
+        private bool KeyDown(ref bool key, ref float time)
         {
             time = 0;
             if (!key)
             {
                 key = true;
+                return false;
             }
             else
             {
                 key = false;
-                StartDash();
+                return true;
             }
         }
 
@@ -154,6 +166,9 @@ namespace Game.Control
         {
             if (active) return;
 
+            gravity = rb.gravityScale;
+            rb.gravityScale = 0;
+            playerData.attributes.RestrictMovement();
             anim.Play(PlayerAnimationInts.Player_dash_start);
             Transform root = transform.root.transform;
             Vector3 scale = root.localScale;
@@ -162,7 +177,7 @@ namespace Game.Control
             speedTime = 0;
             active = true;
             impulseSrc.GenerateImpulse(Vector2.left);
-            DashExplosionEffect exp = Instantiate(data.explosion, transform.position, Quaternion.identity);
+            DashExplosionEffect exp = Instantiate(dashData.explosion, transform.position, Quaternion.identity);
             exp.StartExplosion();
         }
     }

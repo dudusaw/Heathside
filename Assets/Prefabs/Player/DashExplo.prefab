@@ -97,4 +97,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxScale: 2
   initialScale: 0.1
-  speed: 2
+  speed: 3

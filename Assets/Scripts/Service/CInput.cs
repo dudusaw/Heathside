@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Game
+namespace Heathside
 {
     /// <summary>
     /// Decorator for default Input class used for blocking some input through ui elements

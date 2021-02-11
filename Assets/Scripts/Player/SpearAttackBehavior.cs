@@ -1,8 +1,8 @@
-using Game.Base;
+using Heathside.Base;
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     public class SpearAttackBehavior : BehaviorBase
     {
@@ -38,17 +38,20 @@ namespace Game.Control
         public override void Interrupt()
         {
             attacks[prevAttack].Interrupt();
+            StopAllCoroutines();
+            queueCoStarted = false;
         }
 
-        public override void StateUpdate()
+        public override void StateUpdate(System.Action interruptionCallback)
         {
             if (!queueCoStarted && CInput.GetMouseButtonDownNonUI(0))
             {
+                interruptionCallback();
                 if (!IsActive)
                 {
                     ProcessAttack();
                 }
-                else
+                else if (queueNextAttackWhenReady)
                 {
                     float prevActiveTime = attacks[prevAttack].ActiveTime;
                     if (timeSinceLastAttack > prevActiveTime - minTimeForQueue)

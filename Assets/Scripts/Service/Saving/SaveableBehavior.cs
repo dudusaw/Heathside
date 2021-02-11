@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Saving
+namespace Heathside.Saving
 {
     public abstract class SaveableBehaviour : MonoBehaviour, ISaveable, ISerializationCallbackReceiver
     {

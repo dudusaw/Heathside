@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Game.Saving
+namespace Heathside.Saving
 {
     [Serializable]
     /// <summary>

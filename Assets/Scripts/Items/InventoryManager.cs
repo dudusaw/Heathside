@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Items
+namespace Heathside.Items
 {
     public class InventoryManager : MonoBehaviour
     {

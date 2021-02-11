@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Game.Saving
+namespace Heathside.Saving
 {
     public interface ISaveable
     {

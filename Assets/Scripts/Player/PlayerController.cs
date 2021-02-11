@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     public class PlayerController : MonoBehaviour
     {
@@ -11,7 +11,7 @@ namespace Game.Control
 
         private Rigidbody2D rb;
         private Animator anim;
-        private Combat combat;
+        private PlayerCombat combat;
         private MovementBehavior movementBehavior;
 
         private void Awake()
@@ -19,8 +19,8 @@ namespace Game.Control
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
             rb.gravityScale = data.defaultGravity;
-            movementBehavior = new MovementBehavior(rb, anim, data);
-            combat = new Combat(this);
+            movementBehavior = new MovementBehavior(this, data);
+            combat = new PlayerCombat(this);
         }
 
         private void FixedUpdate()
@@ -30,8 +30,8 @@ namespace Game.Control
 
         private void Update()
         {
-            MovementAbility movementAbility = combat.UpdateStates();
-            movementBehavior.InputUpdate(this, movementAbility);
+            combat.UpdateStates();
+            movementBehavior.InputUpdate(this);
             UpdateAnimations();
 
             if (Input.GetKeyDown(KeyCode.R))
@@ -43,14 +43,14 @@ namespace Game.Control
         private void UpdateAnimations()
         {
             bool onGround = movementBehavior.OnGround;
+            bool isRunning = movementBehavior.Direction != MovingDirection.idle;
             anim.SetBool(PlayerAnimationInts.onGround, onGround);
+            anim.SetBool(PlayerAnimationInts.isRunning, isRunning);
+
+            movementBehavior.ScaleFlipFromDirection(transform);
+
             if (!combat.IsActiveAny())
             {
-                movementBehavior.ScaleFlipFromDirection(transform);
-
-                bool isRunning = movementBehavior.Direction != MovingDirection.idle;
-                anim.SetBool(PlayerAnimationInts.isRunning, isRunning);
-
                 FallingCheck(onGround);
             }
         }

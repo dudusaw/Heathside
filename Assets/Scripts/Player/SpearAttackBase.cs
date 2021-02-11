@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     public class SpearAttackBase : MonoBehaviour
     {
@@ -56,7 +56,7 @@ namespace Game.Control
         public void Interrupt()
         {
             StopCoroutine(co);
-            SetEnabledState(false);
+            StopAttack();
         }
 
         private IEnumerator StartAttack(float waitTime)

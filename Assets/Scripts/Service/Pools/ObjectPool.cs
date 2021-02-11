@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.Base
+namespace Heathside.Base
 {
     public interface IObjectPoolNotifier
     {

@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
-    public class BehaviorBase : MonoBehaviour, IStateBehavior
+    public abstract class BehaviorBase : MonoBehaviour, IStateBehavior
     {
-        [SerializeField] protected MovementAbility movement;
         [SerializeField] protected bool interruptible = true;
 
         public virtual bool IsActive => false;
-
-        public virtual MovementAbility Movement => movement;
 
         public virtual bool Interruptible => interruptible;
 
@@ -17,8 +14,6 @@ namespace Game.Control
         {
         }
 
-        public virtual void StateUpdate()
-        {
-        }
+        public abstract void StateUpdate(System.Action interruptionCallback);
     }
 }

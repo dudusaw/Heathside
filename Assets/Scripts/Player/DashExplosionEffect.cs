@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     public class DashExplosionEffect : MonoBehaviour
     {
