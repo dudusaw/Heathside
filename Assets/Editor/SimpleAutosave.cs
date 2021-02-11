@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace Game
+namespace Heathside
 {
     [InitializeOnLoad]
     public static class SimpleAutosave

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game
+namespace Heathside
 {
     public static class GameLayers
     {

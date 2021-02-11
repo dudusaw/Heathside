@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace Game.AI
+namespace Heathside.AI
 {
     public interface RunBehavior
     {

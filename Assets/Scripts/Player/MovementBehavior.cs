@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     public enum MovingDirection
     {
@@ -15,22 +15,22 @@ namespace Game.Control
         private Animator anim;
         private bool jumpCoroStarted;
         private float xInputAxis;
+        private PlayerAttributes attributes;
         private PlayerData data;
-        private MovementAbility movementAbility;
+        private Rigidbody2D rb;
+        private Collider2D col;
 
         private MovingDirection lastDirection = MovingDirection.right;
         private MovingDirection movingDirection = MovingDirection.idle;
 
-        private Rigidbody2D rb;
-        private Collider2D col;
-
         public bool OnGround { get; private set; }
         public MovingDirection Direction { get => movingDirection; }
 
-        public MovementBehavior(Rigidbody2D rb, Animator anim, PlayerData data)
+        public MovementBehavior(MonoBehaviour root, PlayerData data)
         {
-            this.anim = anim;
-            this.rb = rb;
+            this.attributes = data.attributes;
+            this.anim = root.GetComponent<Animator>();
+            this.rb = root.GetComponent<Rigidbody2D>();
             this.data = data;
             Collider2D[] col2ds = new Collider2D[1];
             int colCount = rb.GetAttachedColliders(col2ds);
@@ -46,12 +46,8 @@ namespace Game.Control
 
         public void MovementFixedUpdate()
         {
-            float speed = data.speed;
-            if (movementAbility.InfluenceSpeed)
-            {
-                speed = movementAbility.DesiredSpeed;
-            }
-            if (speed > 0)
+            float speed = attributes.ActiveSpeed;
+            if (speed > 0.0001f)
             {
                 TestGrounded();
                 UpdateMoving(speed);
@@ -59,9 +55,8 @@ namespace Game.Control
         }
 
         /// <param name="obj">MonoBehaviour to start a coroutine from</param>
-        public void InputUpdate(MonoBehaviour obj, MovementAbility movementAbility)
+        public void InputUpdate(MonoBehaviour obj)
         {
-            this.movementAbility = movementAbility;
             xInputAxis = Input.GetAxis("Horizontal");
             if (Mathf.Approximately(xInputAxis, 0))
             {

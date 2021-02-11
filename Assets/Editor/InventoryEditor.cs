@@ -1,8 +1,8 @@
-using Game.Items;
+using Heathside.Items;
 using UnityEditor;
 using UnityEngine;
 
-namespace Game
+namespace Heathside
 {
     [CustomEditor(typeof(InventoryManager))]
     public class InventoryEditor : Editor

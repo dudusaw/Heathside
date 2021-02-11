@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Base
+namespace Heathside.Base
 {
     public class PooledObject : MonoBehaviour
     {

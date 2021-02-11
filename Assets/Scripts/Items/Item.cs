@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Items
+namespace Heathside.Items
 {
     public enum ItemRarity
     {

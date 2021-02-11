@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Game.Items
+namespace Heathside.Items
 {
     public class InventorySlot : MonoBehaviour,
         IDragHandler, IEndDragHandler, IBeginDragHandler, IPointerClickHandler

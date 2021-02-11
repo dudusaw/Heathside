@@ -1,15 +1,15 @@
 using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     [CreateAssetMenu(menuName = "Game/PlayerData")]
     public class PlayerData : ScriptableObject
     {
+        [SerializeField]
+        public PlayerAttributes attributes;
+
         [SerializeField, Tooltip("Should be negative")]
         public float fallingEnterVelocity = -20f;
-
-        [SerializeField]
-        public float speed = 5f;
 
         [SerializeField]
         public float accelerationValue = 5f;

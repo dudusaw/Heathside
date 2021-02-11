@@ -130,6 +130,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 110491394, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_AssetsPPU
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 110491394, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_UpscaleRT
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 110491394, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_RefResolutionX
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 110491394, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_RefResolutionY
+      value: 180
+      objectReference: {fileID: 0}
     - target: {fileID: 4536162916673846034, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
       propertyPath: m_Name
       value: MainCamera
@@ -137,6 +153,14 @@ PrefabInstance:
     - target: {fileID: 4536162916673846039, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536162916673846039, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4536162916673846039, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4536162916673846039, guid: 8404e6d3627725a4b8610872b445fdf9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -347,7 +371,7 @@ SpriteRenderer:
   m_SortingLayerID: -2021144163
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 247b3c14a2be77e499b902e24e379061, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -394,11 +418,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaf4f035c6897134882ea338fac87802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movement:
-    influenceSpeed: 1
-    desiredSpeed: 0
-  interruptible: 0
-  data: {fileID: 11400000, guid: fe00d640458fbd84babf3dbc21a7fae7, type: 2}
+  interruptible: 1
+  dashData: {fileID: 11400000, guid: fe00d640458fbd84babf3dbc21a7fae7, type: 2}
+  playerData: {fileID: 11400000, guid: bd1164f33b8d0c44c94bc223c38d4235, type: 2}
 --- !u!114 &1153802880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -547,7 +569,7 @@ SpriteRenderer:
   m_SortingLayerID: -2021144163
   m_SortingLayer: -1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 247b3c14a2be77e499b902e24e379061, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -627,6 +649,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5928913126736752918, guid: ff77d15bd80b4fa46ac51f719ce2de3d, type: 3}
+      propertyPath: attributes
+      value: 
+      objectReference: {fileID: 11400000, guid: 875569cf5b1c40c42b7a2aac5c1e9ff5, type: 2}
+    - target: {fileID: 5928913126736752918, guid: ff77d15bd80b4fa46ac51f719ce2de3d, type: 3}
+      propertyPath: attributes.activeSpeed
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff77d15bd80b4fa46ac51f719ce2de3d, type: 3}
 --- !u!1001 &1944467564
@@ -636,6 +666,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1153802878}
     m_Modifications:
+    - target: {fileID: 3888274535510335505, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1831de6b9569bf84c998c56083c393ca, type: 2}
     - target: {fileID: 7585200903783831810, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -683,6 +717,14 @@ PrefabInstance:
     - target: {fileID: 7585200903783831811, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}
       propertyPath: m_Name
       value: SpearAttack
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585200903783831812, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}
+      propertyPath: minTimeForQueue
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7585200903783831812, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}
+      propertyPath: queueNextAttackWhenReady
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5251e8c3efa8a84fa2660f11cda58c9, type: 3}

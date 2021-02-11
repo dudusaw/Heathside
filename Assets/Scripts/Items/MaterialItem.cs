@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Items
+namespace Heathside.Items
 {
     [CreateAssetMenu(menuName = "Game/MaterialItem")]
     public class MaterialItem : Item

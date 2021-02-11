@@ -1,7 +1,7 @@
-using Game.Control;
+using Heathside.Control;
 using UnityEngine;
 
-namespace Game.Items
+namespace Heathside.Items
 {
     public enum EquipSlot
     {

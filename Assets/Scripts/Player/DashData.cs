@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Control
+namespace Heathside.Control
 {
     [CreateAssetMenu(menuName = "Game/DashData")]
     public class DashData : ScriptableObject
