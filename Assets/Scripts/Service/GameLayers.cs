@@ -5,12 +5,22 @@ namespace Heathside
     public static class GameLayers
     {
         public static readonly int Ground;
-        public static readonly int Hittable;
+        public static readonly int Entity;
 
         static GameLayers()
         {
             Ground = GetLayer("Ground");
-            Hittable = GetLayer("Hittable");
+            Entity = GetLayer("Entity");
+        }
+
+        public static int Group(params int[] layers)
+        {
+            int result = 0;
+            foreach (var layer in layers)
+            {
+                result |= layer;
+            }
+            return result;
         }
 
         private static int GetLayer(string name)

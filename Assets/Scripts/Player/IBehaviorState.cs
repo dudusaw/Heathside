@@ -1,19 +1,6 @@
 ﻿namespace Heathside.Control
-
 {
-    /// <summary>
-    /// Buffs, debuffs effects
-    /// </summary>
-    public interface IEffectState
-    {
-        /// <summary>
-        /// Called every frame when it should update its state.
-        /// It can update its generic state (timing, etc.) in default update.
-        /// </summary>
-        void StateUpdate();
-    }
-
-    public interface IStateBehavior
+    public interface IBehaviorState
     {
         /// <summary>
         /// Called every frame when it should update its state.

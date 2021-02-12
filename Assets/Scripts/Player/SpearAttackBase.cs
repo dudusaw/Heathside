@@ -20,7 +20,6 @@ namespace Heathside.Control
         private Coroutine co;
 
         private int animHash;
-
         private static readonly int shaderTimeID = Shader.PropertyToID("_FadeTime");
 
         public bool IsActive { get; private set; }
@@ -66,6 +65,11 @@ namespace Heathside.Control
             swingAudio.Play();
             anim.Play(animHash);
             float initTime = waitTime;
+
+            CombatUtils.ActOnAllOverlapsOneTime<IDamageReceiver>(hitArea, receiver =>
+            {
+                receiver.TakeDamage(5f);
+            });
 
             while (waitTime > 0)
             {

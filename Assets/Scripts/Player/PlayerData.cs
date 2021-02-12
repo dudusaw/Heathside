@@ -1,3 +1,4 @@
+using Heathside.Attributes;
 using UnityEngine;
 
 namespace Heathside.Control
