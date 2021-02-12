@@ -46,9 +46,9 @@ namespace Heathside.Control
         {
             if (!queueCoStarted && CInput.GetMouseButtonDownNonUI(0))
             {
-                interruptionCallback();
                 if (!IsActive)
                 {
+                    interruptionCallback();
                     ProcessAttack();
                 }
                 else if (queueNextAttackWhenReady)
@@ -56,6 +56,7 @@ namespace Heathside.Control
                     float prevActiveTime = attacks[prevAttack].ActiveTime;
                     if (timeSinceLastAttack > prevActiveTime - minTimeForQueue)
                     {
+                        interruptionCallback();
                         StartCoroutine(QueueNextAttack(prevActiveTime - timeSinceLastAttack));
                     }
                 }

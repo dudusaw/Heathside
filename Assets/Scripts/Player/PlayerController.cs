@@ -18,8 +18,8 @@ namespace Heathside.Control
         {
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+            movementBehavior = GetComponent<MovementBehavior>();
             rb.gravityScale = data.defaultGravity;
-            movementBehavior = new MovementBehavior(this, data);
             combat = new PlayerCombat(this);
         }
 
@@ -31,7 +31,7 @@ namespace Heathside.Control
         private void Update()
         {
             combat.UpdateStates();
-            movementBehavior.InputUpdate(this);
+            movementBehavior.InputUpdate();
             UpdateAnimations();
 
             if (Input.GetKeyDown(KeyCode.R))

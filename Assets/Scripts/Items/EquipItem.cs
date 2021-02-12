@@ -13,10 +13,10 @@ namespace Heathside.Items
     public class EquipItem : MaterialItem
     {
         [SerializeField] private EquipSlot slot;
-        [SerializeField] private IStateBehavior behavior;
+        [SerializeField] private IBehaviorState behavior;
 
         public EquipSlot Slot { get => slot; }
-        public IStateBehavior Behavior { get => behavior; }
+        public IBehaviorState Behavior { get => behavior; }
 
         private void Awake()
         {

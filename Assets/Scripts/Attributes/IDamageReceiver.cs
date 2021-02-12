@@ -1,8 +1,8 @@
-﻿namespace Heathside.Control
+﻿namespace Heathside
 {
     public interface IDamageReceiver
     {
         void TakeDamage(float incomingDamage);
-        void TakeEffect(IEffectState effect);
+        void TakeEffect();
     }
 }

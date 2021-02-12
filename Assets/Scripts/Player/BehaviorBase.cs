@@ -2,7 +2,7 @@
 
 namespace Heathside.Control
 {
-    public abstract class BehaviorBase : MonoBehaviour, IStateBehavior
+    public abstract class BehaviorBase : MonoBehaviour, IBehaviorState
     {
         [SerializeField] protected bool interruptible = true;
 

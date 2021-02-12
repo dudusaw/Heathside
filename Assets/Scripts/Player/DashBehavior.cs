@@ -1,4 +1,5 @@
 ﻿using Cinemachine;
+using Heathside.Attributes;
 using Heathside.Base;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ namespace Heathside.Control
         private Rigidbody2D rb;
         private Collider2D col;
         private CinemachineImpulseSource impulseSrc;
+        private IMovementController movementController;
 
         private MovingDirection direction = MovingDirection.idle;
 
@@ -26,15 +28,15 @@ namespace Heathside.Control
         private float speedTime;
 
         [SerializeField] private DashData dashData;
-        [SerializeField] private PlayerData playerData;
 
         private void Awake()
         {
             rb = this.GetComponentOnRoot<Rigidbody2D>();
             anim = this.GetComponentOnRoot<Animator>();
             col = this.GetComponentOnRoot<Collider2D>();
+            movementController = this.GetComponentOnRoot<IMovementController>();
             impulseSrc = GetComponent<CinemachineImpulseSource>();
-            Utils.CheckComponents(rb, anim, col, dashData, impulseSrc);
+            Utils.CheckComponents(impulseSrc);
             impulseSrc.m_ImpulseDefinition.m_AmplitudeGain = dashData.impulseAmp;
             impulseSrc.m_ImpulseDefinition.m_FrequencyGain = dashData.impulseFreq;
         }
@@ -131,7 +133,7 @@ namespace Heathside.Control
         {
             anim.Play(PlayerAnimationInts.Player_dash_end);
             active = false;
-            playerData.attributes.RestoreMovement();
+            movementController.CanMove = true;
             rb.gravityScale = gravity;
         }
 
@@ -168,7 +170,7 @@ namespace Heathside.Control
 
             gravity = rb.gravityScale;
             rb.gravityScale = 0;
-            playerData.attributes.RestrictMovement();
+            movementController.CanMove = false;
             anim.Play(PlayerAnimationInts.Player_dash_start);
             Transform root = transform.root.transform;
             Vector3 scale = root.localScale;

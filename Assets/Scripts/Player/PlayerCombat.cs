@@ -1,31 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Heathside.Attributes;
 
 namespace Heathside.Control
 {
     public class PlayerCombat
     {
 
-        private List<IStateBehavior> behaviors;
+        private List<IBehaviorState> behaviors;
 
         public PlayerCombat(MonoBehaviour root)
         {
-            IStateBehavior[] array = root.GetComponentsInChildren<IStateBehavior>();
-            behaviors = new List<IStateBehavior>(array);
+            IBehaviorState[] array = root.GetComponentsInChildren<IBehaviorState>();
+            behaviors = new List<IBehaviorState>(array);
         }
 
         public void UpdateStates()
+        {
+            if (UpdateNonInterruptibles())
+            {
+                return;
+            }
+
+            UpdateAll();
+        }
+
+        private bool UpdateNonInterruptibles()
         {
             foreach (var item in behaviors)
             {
                 if (item.IsActive && !item.Interruptible)
                 {
                     item.StateUpdate(() => { });
-                    return;
+                    return true;
                 }
             }
+            return false;
+        }
 
+        private void UpdateAll()
+        {
             foreach (var item in behaviors)
             {
                 Action interruptionCallback = GetInterruptionCallback(item);
@@ -33,7 +48,7 @@ namespace Heathside.Control
             }
         }
 
-        private Action GetInterruptionCallback(IStateBehavior item)
+        private Action GetInterruptionCallback(IBehaviorState item)
         {
             return () =>
             {
